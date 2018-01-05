@@ -8,10 +8,14 @@ import com.example.bradj.eventit.Model.DataAccess.RetrofitClient;
 
 public class ApiUtils {
 
-    public static final String BASE_URL = "http://10.0.3.2:8080/";
+    public static final String BASE_URL = " http://52.60.167.57:8080/";
 
     public static EventService getEventService() {
         return RetrofitClient.getClient(BASE_URL).create(EventService.class);
+    }
+
+    public static UserService getUserService() {
+        return RetrofitClient.getClient(BASE_URL).create(UserService.class);
     }
 }
 
