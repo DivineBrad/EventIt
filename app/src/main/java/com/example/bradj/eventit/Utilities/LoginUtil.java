@@ -11,7 +11,7 @@ import android.support.v7.app.AppCompatActivity;
 
 public class LoginUtil extends AppCompatActivity {
     private static LoginUtil instance;
-    private static final String PREFS_NAME = "default_preferences";
+    public static final String PREFS_NAME = "default_preferences";
 
     public synchronized static LoginUtil getInstance() {
         if (instance == null) {
