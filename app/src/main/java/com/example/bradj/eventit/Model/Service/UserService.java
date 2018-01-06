@@ -36,6 +36,6 @@ public interface UserService {
     @GET("/api/user")
     Call<User> getUsers(@Path("userId") String userId);
 
-    @GET("/api/user")
+    @POST("/api/user/login")
     Call<User> getLoginUser(@Body User user);
 }
