@@ -1,5 +1,8 @@
 package com.example.bradj.eventit;
 
+import android.app.Fragment;
+import android.net.Uri;
+import android.support.v4.app.FragmentTransaction;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -20,7 +23,7 @@ import android.view.MenuItem;
 import com.example.bradj.eventit.Utilities.LoginUtil;
 
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+        implements NavigationView.OnNavigationItemSelectedListener, DashboardFragment.OnFragmentInteractionListener, MapFragment.OnFragmentInteractionListener {
 
     private LoginUtil loginUtil;
 
@@ -81,11 +84,14 @@ public class MainActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-//        if (id == R.id.nav_share) {
-//
-//        } else if (id == R.id.nav_send) {
-//
-//        }
+        if (id == R.id.dashboard) {
+            DashboardFragment fragment=DashboardFragment.newInstance("a","b");
+            FragmentTransaction fragmentTransaction=getSupportFragmentManager().beginTransaction();
+            fragmentTransaction.replace(R.id.container, fragment);
+            fragmentTransaction.addToBackStack(null);
+            fragmentTransaction.commit();
+            setTitle(item.getTitle());
+        }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
@@ -123,6 +129,11 @@ public class MainActivity extends AppCompatActivity
 // 3. Get the AlertDialog from create()
         AlertDialog dialog = builder.create();
         builder.show();
+
+    }
+
+    @Override
+    public void onFragmentInteraction(Uri uri) {
 
     }
 }

@@ -10,9 +10,14 @@
             android:title="Dashboard"
             android:checked="true"/>
         <item
-            android:id="@+id/checkin"
+            android:id="@+id/organizations"
             android:icon="@drawable/ic_menu_gallery"
-            android:title="Check In"
+            android:title="Organizations"
+            />
+        <item
+            android:id="@+id/events"
+            android:icon="@drawable/ic_menu_gallery"
+            android:title="Events"
             />
 
     </group>

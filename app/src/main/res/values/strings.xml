@@ -32,4 +32,9 @@
     <string name="dialog_OK">Ok</string>
     <string name="cancel">Cancel</string>
     <string name="menu_registered_events">private events</string>
+    <string name="about_us">About Us</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="enter_password">Enter Password</string>
 </resources>
