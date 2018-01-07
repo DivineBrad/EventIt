@@ -23,6 +23,7 @@ import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
@@ -137,8 +138,8 @@ public class MapFragment extends Fragment {
     public void plotMarkers(List<Event> events){
         googleMap.clear();
         for(Event event:events){
-            googleMap.addMarker(new MarkerOptions().position(new LatLng(Double.parseDouble(event.getAddress().getLatitude()),Double.parseDouble(event.getAddress().getLongitude()))).title(event.getName()).snippet(event.getDescription()));
-
+            Marker marker=googleMap.addMarker(new MarkerOptions().position(new LatLng(Double.parseDouble(event.getAddress().getLatitude()),Double.parseDouble(event.getAddress().getLongitude()))));
+            marker.setTag(event);
         }
     }
 
@@ -264,9 +265,13 @@ public class MapFragment extends Fragment {
 //                LatLng centerLocation=new LatLng(mLastKnownLocation.getLatitude(),mLastKnownLocation.getLongitude());
 //                CameraPosition cameraPosition = new CameraPosition.Builder().target(centerLocation).zoom(12).build();
 //                googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
-
-                if(!eventList.isEmpty())
+                googleMap.getUiSettings().setMyLocationButtonEnabled(true);
+                if(eventList!=null){
                     plotMarkers(eventList);
+                    googleMap.setInfoWindowAdapter(new MyInfoWindowAdapter(getActivity()));
+
+                }
+
 
 
 

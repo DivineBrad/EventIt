@@ -170,7 +170,7 @@ public class MainActivity extends AppCompatActivity
         switch(id){
             case  R.id.dashboard:
                 DashboardFragment dFragment=DashboardFragment.newInstance("a","b");
-               fragmentTransaction=getSupportFragmentManager().beginTransaction();
+                fragmentTransaction=getSupportFragmentManager().beginTransaction();
                 fragmentTransaction.replace(R.id.container, dFragment);
                 fragmentTransaction.addToBackStack(null);
                 fragmentTransaction.commit();
@@ -243,4 +243,8 @@ public class MainActivity extends AppCompatActivity
     }
 
 
+    public void testTab(MenuItem item) {
+        Intent intent=new Intent(getApplicationContext(),Main2Activity.class);
+        startActivity(intent);
+    }
 }
