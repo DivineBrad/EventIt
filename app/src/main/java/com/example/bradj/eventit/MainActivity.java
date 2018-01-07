@@ -1,6 +1,7 @@
 package com.example.bradj.eventit;
 
 import android.app.Fragment;
+import android.content.Context;
 import android.net.Uri;
 import android.support.v4.app.FragmentTransaction;
 import android.content.DialogInterface;
@@ -19,13 +20,29 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TextView;
 
+import com.example.bradj.eventit.Model.Entity.User;
+import com.example.bradj.eventit.Model.Service.ApiUtils;
+import com.example.bradj.eventit.Model.Service.UserService;
 import com.example.bradj.eventit.Utilities.LoginUtil;
+
+import java.io.IOException;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, DashboardFragment.OnFragmentInteractionListener, MapFragment.OnFragmentInteractionListener {
 
     private LoginUtil loginUtil;
+    private User user;
+    private UserService userService;
+    public static final String PREFS_NAME = "default_preferences";
+    private TextView userDetails;
+    private TextView userEmail;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,7 +51,29 @@ public class MainActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         loginUtil= LoginUtil.getInstance();
+        userService= ApiUtils.getUserService();
+        int userId=getApplicationContext().getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE).getInt("user id",0);
+        user=new User();
+        userService.getUser(""+userId).enqueue(new Callback<User>() {
 
+            @Override
+            public void onResponse(Call<User> call, Response<User> response) {
+                if(response.isSuccessful()){
+                    MainActivity.this.user=response.body();
+                    userDetails=findViewById(R.id.display_userInfo);
+                    userEmail=findViewById(R.id.display_userEmail);
+
+                    userDetails.setText(user.getFirstName()+" "+user.getLastName());
+                    userEmail.setText(user.getEmail());
+
+                }
+            }
+
+            @Override
+            public void onFailure(Call<User> call, Throwable t) {
+
+            }
+        });
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -44,6 +83,10 @@ public class MainActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+
+
+
     }
 
     @Override

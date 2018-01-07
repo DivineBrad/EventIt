@@ -33,8 +33,8 @@ public interface UserService {
     @GET("/api/user")
     Call<UserResponse> getUsers();
 
-    @GET("/api/user")
-    Call<User> getUsers(@Path("userId") String userId);
+    @GET("/api/user/{userId}")
+    Call<User> getUser(@Path("userId") String userId);
 
     @POST("/api/user/login")
     Call<User> getLoginUser(@Body User user);
