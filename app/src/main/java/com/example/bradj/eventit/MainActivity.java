@@ -10,6 +10,8 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
@@ -22,6 +24,13 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
 
+import com.example.bradj.eventit.Model.Adapter.EventsAdapter;
+import com.example.bradj.eventit.Model.Adapter.RegisteredEventsAdapter;
+import com.example.bradj.eventit.Model.Entity.Event;
+import com.example.bradj.eventit.Model.Entity.RegisteredEvent;
+import com.example.bradj.eventit.Model.Service.ApiUtils;
+import com.example.bradj.eventit.Model.Service.EventService;
+import com.example.bradj.eventit.Model.Service.RegisteredEventService;
 import com.example.bradj.eventit.Model.Entity.User;
 import com.example.bradj.eventit.Model.Service.ApiUtils;
 import com.example.bradj.eventit.Model.Service.UserService;
@@ -33,10 +42,24 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener, DashboardFragment.OnFragmentInteractionListener, MapFragment.OnFragmentInteractionListener {
+        implements NavigationView.OnNavigationItemSelectedListener, DashboardFragment.OnFragmentInteractionListener, MapFragment.OnFragmentInteractionListener,
+        EventsFragment.OnFragmentInteractionListener{
 
     private LoginUtil loginUtil;
+    private EventService mService;
+    private RecyclerView recyclerView;
+   // private RegisteredEventsAdapter dataAdapter;
+    //private List<RegisteredEvent> dataArrayList;
+    private EventsAdapter dataAdapter;
+    private List<Event> dataArrayList;
     private User user;
     private UserService userService;
     public static final String PREFS_NAME = "default_preferences";
@@ -114,11 +137,16 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
+        switch(id) {
+            case R.id.action_settings:
+                return true;
 
-        return super.onOptionsItemSelected(item);
+            default:
+                // If we got here, the user's action was not recognized.
+                // Invoke the superclass to handle it.
+                return super.onOptionsItemSelected(item);
+            }
+
     }
 
     @SuppressWarnings("StatementWithEmptyBody")
@@ -126,19 +154,35 @@ public class MainActivity extends AppCompatActivity
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
         int id = item.getItemId();
+        DrawerLayout drawer;
+        FragmentTransaction fragmentTransaction;
+        // Switch statement to handle menu options
+        switch(id){
+            case  R.id.dashboard:
+                DashboardFragment dFragment=DashboardFragment.newInstance("a","b");
+               fragmentTransaction=getSupportFragmentManager().beginTransaction();
+                fragmentTransaction.replace(R.id.container, dFragment);
+                fragmentTransaction.addToBackStack(null);
+                fragmentTransaction.commit();
+                setTitle(item.getTitle());
+                break;
 
-        if (id == R.id.dashboard) {
-            DashboardFragment fragment=DashboardFragment.newInstance("a","b");
-            FragmentTransaction fragmentTransaction=getSupportFragmentManager().beginTransaction();
-            fragmentTransaction.replace(R.id.container, fragment);
-            fragmentTransaction.addToBackStack(null);
-            fragmentTransaction.commit();
-            setTitle(item.getTitle());
+            case  R.id.events:
+                EventsFragment eFragment=EventsFragment.newInstance("a","b");
+                fragmentTransaction=getSupportFragmentManager().beginTransaction();
+                fragmentTransaction.replace(R.id.container, eFragment);
+                fragmentTransaction.addToBackStack(null);
+                fragmentTransaction.commit();
+                setTitle(item.getTitle());
+                break;
+
         }
-
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+
+
+
     }
 
     public void logOut(MenuItem item) {
@@ -179,4 +223,6 @@ public class MainActivity extends AppCompatActivity
     public void onFragmentInteraction(Uri uri) {
 
     }
+
+
 }
