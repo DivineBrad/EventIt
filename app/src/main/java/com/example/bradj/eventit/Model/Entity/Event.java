@@ -1,16 +1,14 @@
 package com.example.bradj.eventit.Model.Entity;
 
-/**
- * Created by Bradley Blanchard on 2017-12-28.
- */
-        import com.google.gson.annotations.Expose;
-        import com.google.gson.annotations.SerializedName;
+
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
 
 public class Event {
 
     @SerializedName("eventId")
     @Expose
-    private long eventId;
+    private Integer eventId;
     @SerializedName("name")
     @Expose
     private String name;
@@ -23,21 +21,62 @@ public class Event {
     @SerializedName("date")
     @Expose
     private String date;
+    @SerializedName("reglimit")
+    @Expose
+    private Integer reglimit;
+    @SerializedName("access")
+    @Expose
+    private String access;
     @SerializedName("organization")
     @Expose
-    private Object organization;
+    private Organization organization;
     @SerializedName("address")
     @Expose
-    private Object address;
-    @SerializedName("alerts")
+    private Address_ address;
+    @SerializedName("category")
     @Expose
-    private Object alerts;
-    @SerializedName("registrations")
+    private Category_ category;
+    @SerializedName("regLimit")
     @Expose
-    private Object registrations;
+    private Integer regLimit;
 
+    /**
+     * No args constructor for use in serialization
+     *
+     */
+    public Event() {
+    }
 
-    public long getEventId() {
+    /**
+     *
+     * @param category
+     * @param organization
+     * @param reglimit
+     * @param eventId
+     * @param address
+     * @param token
+     * @param description
+     * @param name
+     * @param regLimit
+     * @param access
+     * @param date
+     */
+    public Event(Integer eventId, String name, String token, String description, String date, Integer reglimit, String access, Organization organization, Address_ address, Category_ category, Integer regLimit) {
+        super();
+        this.eventId = eventId;
+        this.name = name;
+        this.token = token;
+        this.description = description;
+        this.date = date;
+        this.reglimit = reglimit;
+        this.access = access;
+        this.organization = organization;
+        this.address = address;
+        this.category = category;
+        this.regLimit = regLimit;
+    }
+
+    public Integer getEventId() {
         return eventId;
     }
 
@@ -77,39 +116,52 @@ public class Event {
         this.date = date;
     }
 
-    public Object getOrganization() {
+    public Integer getReglimit() {
+        return reglimit;
+    }
+
+    public void setReglimit(Integer reglimit) {
+        this.reglimit = reglimit;
+    }
+
+    public String getAccess() {
+        return access;
+    }
+
+    public void setAccess(String access) {
+        this.access = access;
+    }
+
+    public Organization getOrganization() {
         return organization;
     }
 
-    public void setOrganization(Object organization) {
+    public void setOrganization(Organization organization) {
         this.organization = organization;
     }
 
-    public Object getAddress() {
+    public Address_ getAddress() {
         return address;
     }
 
-    public void setAddress(Object address) {
+    public void setAddress(Address_ address) {
         this.address = address;
     }
 
-    public Object getAlerts() {
-        return alerts;
+    public Category_ getCategory() {
+        return category;
     }
 
-    public void setAlerts(Object alerts) {
-        this.alerts = alerts;
+    public void setCategory(Category_ category) {
+        this.category = category;
     }
 
-    public Object getRegistrations() {
-        return registrations;
+    public Integer getRegLimit() {
+        return regLimit;
     }
 
-    public void setRegistrations(Object registrations) {
-        this.registrations = registrations;
+    public void setRegLimit(Integer regLimit) {
+        this.regLimit = regLimit;
     }
-
 
 }
-
-

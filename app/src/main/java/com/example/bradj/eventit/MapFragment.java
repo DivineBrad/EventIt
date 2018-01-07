@@ -14,6 +14,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.bradj.eventit.Model.Entity.Event;
 import com.example.bradj.eventit.Model.Entity.User;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -32,6 +33,8 @@ import com.google.android.gms.location.places.PlaceLikelihoodBufferResponse;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.Executor;
 
 
@@ -73,7 +76,7 @@ public class MapFragment extends Fragment {
     private CameraPosition mCameraPosition;
     private final LatLng mDefaultLocation = new LatLng(-33.8523341, 151.2106085);
     private static final int DEFAULT_ZOOM = 15;
-
+    private List<Event> eventList;
 
     public MapFragment() {
         // Required empty public constructor
@@ -115,6 +118,9 @@ public class MapFragment extends Fragment {
 
         // Construct a FusedLocationProviderClient.
         mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(getActivity());
+        if (((MainActivity)getActivity()).getEventList()!=null)
+            eventList=((MainActivity)getActivity()).getEventList();
+
     }
     /**
      * Saves the state of the map when the activity is paused.
@@ -125,6 +131,14 @@ public class MapFragment extends Fragment {
             outState.putParcelable(KEY_CAMERA_POSITION, googleMap.getCameraPosition());
             outState.putParcelable(KEY_LOCATION, mLastKnownLocation);
             super.onSaveInstanceState(outState);
+        }
+    }
+
+    public void plotMarkers(List<Event> events){
+        googleMap.clear();
+        for(Event event:events){
+            googleMap.addMarker(new MarkerOptions().position(new LatLng(Double.parseDouble(event.getAddress().getLatitude()),Double.parseDouble(event.getAddress().getLongitude()))).title(event.getName()).snippet(event.getDescription()));
+
         }
     }
 
@@ -234,6 +248,8 @@ public class MapFragment extends Fragment {
         } catch (Exception e) {
             e.printStackTrace();
         }
+        getLocationPermission();
+        getDeviceLocation();
 
         mMapView.getMapAsync(new OnMapReadyCallback() {
             @Override
@@ -241,20 +257,24 @@ public class MapFragment extends Fragment {
                 googleMap = mMap;
 
                 // For dropping a marker at a point on the Map
-                LatLng sydney = new LatLng(-34, 151);
-                googleMap.addMarker(new MarkerOptions().position(sydney).title("Marker Title").snippet("Marker Description"));
+//                LatLng sydney = new LatLng(-34, 151);
+//                googleMap.addMarker(new MarkerOptions().position(sydney).title("Marker Title").snippet("Marker Description"));
 
                 // For zooming automatically to the location of the marker
-                CameraPosition cameraPosition = new CameraPosition.Builder().target(sydney).zoom(12).build();
-                googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+//                LatLng centerLocation=new LatLng(mLastKnownLocation.getLatitude(),mLastKnownLocation.getLongitude());
+//                CameraPosition cameraPosition = new CameraPosition.Builder().target(centerLocation).zoom(12).build();
+//                googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
 
-                getLocationPermission();
+                if(!eventList.isEmpty())
+                    plotMarkers(eventList);
+
+
 
                 // Turn on the My Location layer and the related control on the map.
                 updateLocationUI();
 
                 // Get the current location of the device and set the position of the map.
-                getDeviceLocation();
+
             }
         });
 
