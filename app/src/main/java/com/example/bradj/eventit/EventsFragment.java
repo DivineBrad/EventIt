@@ -11,6 +11,10 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Spinner;
+import android.widget.Toast;
 
 import com.example.bradj.eventit.Model.Adapter.EventsAdapter;
 import com.example.bradj.eventit.Model.Entity.Event;
@@ -33,7 +37,7 @@ import retrofit2.Response;
  * Use the {@link EventsFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class EventsFragment extends Fragment {
+public class EventsFragment extends Fragment implements AdapterView.OnItemSelectedListener {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -49,6 +53,9 @@ public class EventsFragment extends Fragment {
     private EventsAdapter dataAdapter;
     private List<Event> dataArrayList;
     private static final String TAG = "EventsFragment";
+    private List<Event> filteredList;
+    private String access = "all";
+    private String category = "all";
 
     private OnFragmentInteractionListener mListener;
 
@@ -89,6 +96,15 @@ public class EventsFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_events, container, false);
+        //Handle Spiiners
+
+        //Populate the spinner in the fragment
+        Spinner spinnerAccess = (Spinner) rootView.findViewById(R.id.sp_event_access);
+        Spinner spinnerCategory = (Spinner) rootView.findViewById(R.id.sp_event_category);
+        filteredList = new ArrayList<>();
+        //initialize main arraylist of items
+        dataArrayList = new ArrayList<>();
+
         // Get reference to recyler view
         recyclerView = (RecyclerView) rootView.findViewById(R.id.rvEvents);
         // Set Layout Manager
@@ -96,6 +112,70 @@ public class EventsFragment extends Fragment {
         dataAdapter = new EventsAdapter(getActivity());
         recyclerView.setAdapter(dataAdapter);
         loadJSON();
+        // For xml string array resource
+        ArrayAdapter<CharSequence> filterAdapter = ArrayAdapter.createFromResource(rootView.getContext(), R.array.event_access,
+                android.R.layout.simple_spinner_item);
+        ArrayAdapter<CharSequence> categoryAdapter = ArrayAdapter.createFromResource(rootView.getContext(), R.array.event_categories,
+                android.R.layout.simple_spinner_item);
+        //
+        filterAdapter.setDropDownViewResource(android.R.layout.simple_spinner_item);
+        categoryAdapter.setDropDownViewResource(android.R.layout.simple_spinner_item);
+        spinnerAccess.setAdapter(filterAdapter);
+        spinnerCategory.setAdapter(categoryAdapter);
+
+        //  Spinner event listeners
+        // Access Spinner
+        spinnerAccess.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener()
+        {
+            @Override
+            public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id)
+            {
+                String selected = parentView.getItemAtPosition(position).toString();
+                Context context = parentView.getContext();
+                access = selected.toString();
+                //int duration = Toast.LENGTH_SHORT;
+
+//                Toast toast = Toast.makeText(context, text, duration);
+//                toast.show();
+                filterList(access, category);
+
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parentView) {
+                access="all";
+            }
+        });
+
+        // Event Category Spinner
+
+        spinnerCategory.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener()
+        {
+            @Override
+            public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id)
+            {
+                String selected = parentView.getItemAtPosition(position).toString();
+                Context context = parentView.getContext();
+                category = selected.toString();
+
+//                int duration = Toast.LENGTH_SHORT;
+//
+//                Toast toast = Toast.makeText(context, text, duration);
+//                toast.show();
+                filterList(access, category);
+
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parentView) {
+                category="all";
+            }
+        });
+
+
+
 
         return rootView;
 
@@ -125,6 +205,16 @@ public class EventsFragment extends Fragment {
         mListener = null;
     }
 
+    @Override
+    public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> adapterView) {
+
+    }
+
     /**
      * This interface must be implemented by activities that contain this
      * fragment to allow an interaction in this fragment to be communicated
@@ -145,7 +235,7 @@ public class EventsFragment extends Fragment {
 
 
     private void loadJSON() {
-        dataArrayList = new ArrayList<>();
+
         mService = ApiUtils.getEventService();
         Call<List<Event>> call = mService.getEvents();
         call.enqueue(new Callback<List<Event>>() {
@@ -167,6 +257,72 @@ public class EventsFragment extends Fragment {
         });
     }
 
+    private void filterList(final String access, final String category){
+            if (dataArrayList.size()<1) {
+                dataArrayList = new ArrayList<>();
+                mService = ApiUtils.getEventService();
+                Call<List<Event>> call = mService.getEvents();
+                call.enqueue(new Callback<List<Event>>() {
+                    @Override
+                    public void onResponse(Call<List<Event>> call, Response<List<Event>> response) {
+                        dataArrayList = response.body();
+                        if (access.equals("all") && category.equals("all")) {
+                            dataAdapter.setDataList(dataArrayList);
+                        } else {
+                            filteredList.clear();
+                            for (Event ev : dataArrayList) {
+                                if (ev.getCategory().getType().equals(category)
+                                        && ev.getAccess().equals(access)) {
+                                    filteredList.add(ev);
+                                }
+                            }
+                            dataAdapter.setDataList(filteredList);
+                        }
+
+                        dataAdapter.notifyDataSetChanged();
+                        Log.e("JsonData2", dataArrayList.get(0).getDescription());
+
+
+                    }
+
+                    @Override
+                    public void onFailure(Call<List<Event>> call, Throwable t) {
+                        Log.e("Error", t.getMessage());
+
+                    }
+                });
+            }// End of if dataArraylist check condition
+
+        else {
+                if (access.equals("all") && category.equals("all")) {
+                    dataAdapter.setDataList(dataArrayList);
+                } else {
+                    filteredList.clear();
+                    for (Event ev : dataArrayList) {
+                        if (access.equals("all")){
+                            if (ev.getCategory().getType().equals(category)) {
+                                filteredList.add(ev);
+                            }
+                        }
+                        else if (category.equals("all")){
+                            if (ev.getAccess().equals(access)) {
+                                filteredList.add(ev);
+                        }
+                        else {
+                                if (ev.getAccess().equals(access) && ev.getCategory().getType().equals(category))
+                                    filteredList.add(ev);
+                            }
+
+                    }
+
+                }
+                dataAdapter.setDataList(filteredList);
+                dataAdapter.notifyDataSetChanged();
+            }
+
+    }
+
+}
 }
 
 

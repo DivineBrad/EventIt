@@ -25,16 +25,20 @@ public class Event {
     private String date;
     @SerializedName("organization")
     @Expose
-    private Object organization;
+    private Organization organization;
+    @SerializedName("reglimit")
+    @Expose
+    private Integer reglimit;
+    @SerializedName("access")
+    @Expose
+    private String access;
     @SerializedName("address")
     @Expose
-    private Object address;
-    @SerializedName("alerts")
+    private Address address;
+    @SerializedName("category")
     @Expose
-    private Object alerts;
-    @SerializedName("registrations")
-    @Expose
-    private Object registrations;
+    private Category category;
+
 
 
     public long getEventId() {
@@ -77,39 +81,49 @@ public class Event {
         this.date = date;
     }
 
-    public Object getOrganization() {
+    public Organization getOrganization() {
         return organization;
     }
 
-    public void setOrganization(Object organization) {
+    public void setOrganization(Organization organization) {
         this.organization = organization;
     }
 
-    public Object getAddress() {
+    public  Address getAddress() {
         return address;
     }
 
-    public void setAddress(Object address) {
+    public void setAddress(Address address) {
         this.address = address;
     }
 
-    public Object getAlerts() {
-        return alerts;
+    public void setEventId(long eventId) {
+        this.eventId = eventId;
     }
 
-    public void setAlerts(Object alerts) {
-        this.alerts = alerts;
+    public Category getCategory() {
+        return category;
     }
 
-    public Object getRegistrations() {
-        return registrations;
+    public void setCategory(Category category) {
+        this.category = category;
     }
 
-    public void setRegistrations(Object registrations) {
-        this.registrations = registrations;
+    public Integer getReglimit() {
+        return reglimit;
     }
 
+    public void setReglimit(Integer reglimit) {
+        this.reglimit = reglimit;
+    }
 
+    public String getAccess() {
+        return access;
+    }
+
+    public void setAccess(String access) {
+        this.access = access;
+    }
 }
 
 

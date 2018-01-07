@@ -1,4 +1,36 @@
 <resources>
+<!-- Spinners Array options -->
+    <string-array name="event_access">
+        <item>all</item>
+        <item>registered</item>
+        <item>private</item>
+        <item>public</item>
+
+    </string-array>
+    <string-array name="event_categories">
+        <item>all</item>
+        <item>sales</item>
+        <item>entertainment</item>
+
+    </string-array>
+    <string-array name="org_categories">
+        <item>Australia</item>
+        <item>Canada</item>
+        <item>China</item>
+        <item>India</item>
+        <item>Sri Lanka</item>
+        <item>United States</item>
+    </string-array>
+    <string-array name="org_filters">
+        <item>Australia</item>
+        <item>Canada</item>
+        <item>China</item>
+        <item>India</item>
+        <item>Sri Lanka</item>
+        <item>United States</item>
+    </string-array>
+
+
     <string name="app_name">EventIt</string>
     <string name="title_activity_login">Sign in</string>
 
