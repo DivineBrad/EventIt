@@ -15,6 +15,7 @@ import com.example.bradj.eventit.Model.Service.ApiUtils;
 import com.example.bradj.eventit.Model.Service.EventService;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -46,34 +47,34 @@ public class SubscribeAlertActivity extends AppCompatActivity {
         RecyclerView.ItemDecoration itemDecoration = new DividerItemDecoration(this, DividerItemDecoration.VERTICAL);
         mRecyclerView.addItemDecoration(itemDecoration);
 
-        loadAnswers();
+       // loadAnswers();
     }
 
-    public void loadAnswers() {
-        mService.getEvents().enqueue(new Callback<EventList>() {
-            @Override
-            public void onResponse(Call<EventList> call, Response<EventList> response) {
+//    public void loadAnswers() {
+//        mService.getEvents().enqueue(new Callback<List<Event>>() {
+//            @Override
+//            public void onResponse(Call<EventList> call, Response<EventList> response) {
+//
+//                if (response.isSuccessful()) {
+//                    mAdapter.updateEvents(response.body().getItems());
+//                    Log.d("SubscriberActivity", "events loaded from API");
+//                } else {
+//                    int statusCode = response.code();
+//                    // handle request errors depending on status code
+//                }
+//            }
+//
+//            @Override
+//            public void onFailure(Call<EventList> call, Throwable t) {
+//                showErrorMessage();
+//                Log.d("MainActivity", "error loading from API");
+//
+//            }
+//            public  void showErrorMessage(){
+//
+//            }
+//        });
+//
 
-                if (response.isSuccessful()) {
-                    mAdapter.updateEvents(response.body().getItems());
-                    Log.d("SubscriberActivity", "events loaded from API");
-                } else {
-                    int statusCode = response.code();
-                    // handle request errors depending on status code
-                }
-            }
-
-            @Override
-            public void onFailure(Call<EventList> call, Throwable t) {
-                showErrorMessage();
-                Log.d("MainActivity", "error loading from API");
-
-            }
-            public  void showErrorMessage(){
-
-            }
-        });
-
-
-    }
+    //}
 }

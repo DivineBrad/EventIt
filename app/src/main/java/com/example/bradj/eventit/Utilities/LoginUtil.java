@@ -9,7 +9,7 @@ import android.support.v7.app.AppCompatActivity;
  * Created by ajibd on 1/4/2018.
  */
 
-public class LoginUtil extends AppCompatActivity {
+public class LoginUtil  {
     private static LoginUtil instance;
     public static final String PREFS_NAME = "default_preferences";
 
