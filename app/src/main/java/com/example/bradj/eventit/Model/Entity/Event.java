@@ -152,10 +152,9 @@ public class Event {
         this.category = category;
     }
 
-
-
-
-
+    public Category getCategory() {
+        return category;
+    }
 }
 
 
