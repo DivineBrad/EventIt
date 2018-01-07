@@ -1,4 +1,9 @@
 package com.example.bradj.eventit.Model.Entity;
+
+/**
+ * Created by ajibd on 1/6/2018.
+ */
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
@@ -19,6 +24,30 @@ public class Organization {
     @SerializedName("user")
     @Expose
     private User user;
+
+    /**
+     * No args constructor for use in serialization
+     *
+     */
+    public Organization() {
+    }
+
+    /**
+     *
+     * @param orgId
+     * @param category
+     * @param address
+     * @param name
+     * @param user
+     */
+    public Organization(Integer orgId, String name, Address address, Category category, User user) {
+        super();
+        this.orgId = orgId;
+        this.name = name;
+        this.address = address;
+        this.category = category;
+        this.user = user;
+    }
 
     public Integer getOrgId() {
         return orgId;

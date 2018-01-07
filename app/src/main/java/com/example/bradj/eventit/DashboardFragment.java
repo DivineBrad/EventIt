@@ -3,11 +3,17 @@ package com.example.bradj.eventit;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.view.ViewPager;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import com.example.bradj.eventit.Model.Adapter.DashboardFragmentPagerAdapter;
 
 
 /**
@@ -59,11 +65,13 @@ public class DashboardFragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
-        MapFragment mapFragment=MapFragment.newInstance("","");
-        FragmentTransaction fragmentTransaction=getFragmentManager().beginTransaction();
-        fragmentTransaction.replace(R.id.mapContainer, mapFragment);
-        fragmentTransaction.addToBackStack(null);
-        fragmentTransaction.commit();
+
+//        MapFragment mapFragment=MapFragment.newInstance("","");
+//        FragmentTransaction fragmentTransaction=getFragmentManager().beginTransaction();
+//        fragmentTransaction.replace(R.id.mapContainer, mapFragment);
+//        fragmentTransaction.addToBackStack(null);
+//        fragmentTransaction.commit();
+
 
 
     }
@@ -71,8 +79,46 @@ public class DashboardFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        View rootView=inflater.inflate(R.layout.fragment_dashboard, container, false);
+
+//
+        final ViewPager viewPager = (ViewPager)rootView.findViewById(R.id.viewpager);
+        DashboardFragmentPagerAdapter pagerAdapter=new DashboardFragmentPagerAdapter(getChildFragmentManager(), getContext());
+        viewPager.setAdapter(pagerAdapter);
+
+        // Give the TabLayout the ViewPager
+        final TabLayout tabLayout = rootView.findViewById(R.id.sliding_tabs);
+        tabLayout.addTab(tabLayout.newTab().setText("Map View"));
+        tabLayout.addTab(tabLayout.newTab().setText("Events"));
+
+        viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
+        tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+                viewPager.setCurrentItem(tab.getPosition());
+            }
+
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
+
+            }
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+
+            }
+        });
+        tabLayout.post(new Runnable() {
+            @Override
+            public void run() {
+                tabLayout.setupWithViewPager(viewPager);
+            }
+        });
+
+
+
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_dashboard, container, false);
+        return rootView;
     }
 
     // TODO: Rename method, update argument and hook method into UI event

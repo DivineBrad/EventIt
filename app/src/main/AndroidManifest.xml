@@ -47,7 +47,12 @@
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyBAqY3w9mrWRIDFETlDFXwL_CqMBfoNC-Q"/>
+            android:value="AIzaSyBAqY3w9mrWRIDFETlDFXwL_CqMBfoNC-Q" />
+
+        <activity
+            android:name=".Main2Activity"
+            android:label="@string/title_activity_main2"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>

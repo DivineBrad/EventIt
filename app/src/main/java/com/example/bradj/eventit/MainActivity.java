@@ -1,6 +1,7 @@
 package com.example.bradj.eventit;
 
 import android.app.Fragment;
+import android.content.Context;
 import android.net.Uri;
 import android.support.v4.app.FragmentTransaction;
 import android.content.DialogInterface;
@@ -21,6 +22,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TextView;
 
 import com.example.bradj.eventit.Model.Adapter.EventsAdapter;
 import com.example.bradj.eventit.Model.Adapter.RegisteredEventsAdapter;
@@ -29,7 +31,16 @@ import com.example.bradj.eventit.Model.Entity.RegisteredEvent;
 import com.example.bradj.eventit.Model.Service.ApiUtils;
 import com.example.bradj.eventit.Model.Service.EventService;
 import com.example.bradj.eventit.Model.Service.RegisteredEventService;
+import com.example.bradj.eventit.Model.Entity.User;
+import com.example.bradj.eventit.Model.Service.ApiUtils;
+import com.example.bradj.eventit.Model.Service.UserService;
 import com.example.bradj.eventit.Utilities.LoginUtil;
+
+import java.io.IOException;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -49,6 +60,14 @@ public class MainActivity extends AppCompatActivity
     //private List<RegisteredEvent> dataArrayList;
     private EventsAdapter dataAdapter;
     private List<Event> dataArrayList;
+    private List<Event> eventList;
+
+    private User user;
+    private UserService userService;
+    public static final String PREFS_NAME = "default_preferences";
+    private TextView userDetails;
+    private TextView userEmail;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,8 +76,42 @@ public class MainActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         loginUtil= LoginUtil.getInstance();
+        userService= ApiUtils.getUserService();
+        int userId=getApplicationContext().getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE).getInt("user id",0);
+        user=new User();
+        userService.getUser(""+userId).enqueue(new Callback<User>() {
 
+            @Override
+            public void onResponse(Call<User> call, Response<User> response) {
+                if(response.isSuccessful()){
+                    MainActivity.this.user=response.body();
+                    userDetails=findViewById(R.id.display_userInfo);
+                    userEmail=findViewById(R.id.display_userEmail);
 
+                    userDetails.setText(user.getFirstName()+" "+user.getLastName());
+                    userEmail.setText(user.getEmail());
+
+                }
+            }
+
+            @Override
+            public void onFailure(Call<User> call, Throwable t) {
+
+            }
+        });
+
+        userService.getEvents().enqueue(new Callback<List<Event>>() {
+            @Override
+            public void onResponse(Call<List<Event>> call, Response<List<Event>> response) {
+                if(response.isSuccessful())
+                MainActivity.this.eventList=response.body();
+            }
+
+            @Override
+            public void onFailure(Call<List<Event>> call, Throwable t) {
+                Log.i("events", t.getMessage());
+            }
+        });
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -117,7 +170,7 @@ public class MainActivity extends AppCompatActivity
         switch(id){
             case  R.id.dashboard:
                 DashboardFragment dFragment=DashboardFragment.newInstance("a","b");
-               fragmentTransaction=getSupportFragmentManager().beginTransaction();
+                fragmentTransaction=getSupportFragmentManager().beginTransaction();
                 fragmentTransaction.replace(R.id.container, dFragment);
                 fragmentTransaction.addToBackStack(null);
                 fragmentTransaction.commit();
@@ -140,6 +193,14 @@ public class MainActivity extends AppCompatActivity
 
 
 
+    }
+
+    public List<Event> getEventList() {
+        return eventList;
+    }
+
+    public void setEventList(List<Event> eventList) {
+        this.eventList = eventList;
     }
 
     public void logOut(MenuItem item) {
@@ -182,4 +243,8 @@ public class MainActivity extends AppCompatActivity
     }
 
 
+    public void testTab(MenuItem item) {
+        Intent intent=new Intent(getApplicationContext(),Main2Activity.class);
+        startActivity(intent);
+    }
 }

@@ -1,7 +1,10 @@
 package com.example.bradj.eventit.Model.Service;
 
+import com.example.bradj.eventit.Model.Entity.Event;
 import com.example.bradj.eventit.Model.Entity.User;
 import com.example.bradj.eventit.Model.Entity.UserResponse;
+
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
@@ -33,9 +36,12 @@ public interface UserService {
     @GET("/api/user")
     Call<UserResponse> getUsers();
 
-    @GET("/api/user")
-    Call<User> getUsers(@Path("userId") String userId);
+    @GET("/api/user/{userId}")
+    Call<User> getUser(@Path("userId") String userId);
 
     @POST("/api/user/login")
     Call<User> getLoginUser(@Body User user);
+
+    @GET("/api/event")
+    Call<List<Event>> getEvents();
 }
