@@ -93,6 +93,7 @@ public class EventsFragment extends Fragment {
         recyclerView = (RecyclerView) rootView.findViewById(R.id.rvEvents);
         // Set Layout Manager
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        dataAdapter = new EventsAdapter(getActivity());
         recyclerView.setAdapter(dataAdapter);
         loadJSON();
 
@@ -151,9 +152,9 @@ public class EventsFragment extends Fragment {
             @Override
             public void onResponse(Call<List<Event>> call, Response<List<Event>> response) {
                 dataArrayList = response.body();
-
-                dataAdapter = new EventsAdapter(dataArrayList);
+                dataAdapter.setDataList(dataArrayList);
                 dataAdapter.notifyDataSetChanged();
+                Log.e("JsonData", dataArrayList.get(0).getDescription());
 
 
             }
