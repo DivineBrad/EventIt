@@ -1,5 +1,6 @@
 package com.example.bradj.eventit.Model.Adapter;
 
+import android.app.Activity;
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -10,6 +11,7 @@ import android.widget.TextView;
 import com.example.bradj.eventit.Model.Entity.Event;
 import com.example.bradj.eventit.R;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -21,16 +23,26 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.MyViewHold
 
     private Context context;
     private List<Event> dataList;
+    private Activity activity;
 
     public EventsAdapter(Context context, List<Event> dataList) {
         this.context = context;
         this.dataList = dataList;
     }
+    public EventsAdapter(Activity activity) {
+        this.dataList = new ArrayList<>();
+        this.activity = activity;
+
+    }
+
     public EventsAdapter( List<Event> dataList) {
 
         this.dataList = dataList;
     }
+    public void setDataList (List<Event> list) {
+        this.dataList=list;
 
+    }
     @Override
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view= LayoutInflater.from(parent.getContext()).inflate(R.layout.event_cell,parent,false);
