@@ -14,7 +14,7 @@ import com.example.bradj.eventit.MapFragment;
  */
 
 public class DashboardFragmentPagerAdapter extends FragmentPagerAdapter {
-    final int PAGE_COUNT = 1;
+    final int PAGE_COUNT = 2;
     private String tabTitles[] = new String[] { "Map View", "Private Events" };
     private Context context;
 
