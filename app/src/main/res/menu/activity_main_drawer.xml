@@ -17,7 +17,7 @@
         <item
             android:id="@+id/organizations"
             android:icon="@drawable/ic_menu_gallery"
-            android:title="Organizations"
+            android:title="Subscribed Organizations"
             />
         <item
             android:id="@+id/events"

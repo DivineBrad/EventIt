@@ -23,6 +23,12 @@ public class DashboardFragmentPagerAdapter extends FragmentPagerAdapter {
         this.context = context;
     }
 
+    // overriding getPageTitle()
+    @Override
+    public CharSequence getPageTitle(int position) {
+        return tabTitles[position];
+    }
+
     @Override
     public Fragment getItem(int position) {
         switch (position) {

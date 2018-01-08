@@ -1,6 +1,7 @@
 package com.example.bradj.eventit.Model.Service;
 
 import com.example.bradj.eventit.Model.DataAccess.RetrofitClient;
+import com.example.bradj.eventit.Model.Entity.SubscribedOrg;
 
 /**
  * Created by Bradley Blanchard on 2017-12-29.
@@ -19,6 +20,10 @@ public class ApiUtils {
 
     public static UserService getUserService() {
         return RetrofitClient.getClient(BASE_URL).create(UserService.class);
+    }
+
+    public static SubscribedOrgService getSubscribedOrgService() {
+        return RetrofitClient.getClient(BASE_URL).create(SubscribedOrgService.class);
     }
 
 }
