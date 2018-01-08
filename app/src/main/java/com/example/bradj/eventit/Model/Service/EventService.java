@@ -25,18 +25,10 @@ public interface EventService {
     @Headers("Content-Type: application/json;charset=UTF-8")
     Call<List<Event>> getEvents();
 
+    @GET("/api/event/{id}")
+    @Headers("Content-Type: application/json;charset=UTF-8")
+    Call<Event> getEvents(@Path("id") long id);
 
-    // Registered Events calls
-    @GET("api/registration")
-    @Headers("Content-Type: application/json;charset=UTF-8")
-    Call<List<RegisteredEvent>> getRegisteredEvents();
-
-    @POST("api/registration")
-    @Headers("Content-Type: application/json;charset=UTF-8")
-    Call<RegisteredEvent> addRegisteredEvent(@Body RegisteredEvent regEvent);
-    @DELETE("api/registration/{id}")
-    @Headers("Content-Type: application/json;charset=UTF-8")
-    Call<RegisteredEvent> deleteRegisteredEvent(@Path("id") long id);
 
 
 }
