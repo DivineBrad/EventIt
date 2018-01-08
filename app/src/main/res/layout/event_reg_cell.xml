@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+
+
+    <LinearLayout
+        android:id="@+id/eventLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+
+        android:layout_weight="3"
+        >
+
+        <TextView
+            android:id="@+id/tvEventName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="4dp"
+            android:gravity="start"
+            android:padding="4dp"
+            android:layout_weight="1"
+
+            android:text="Event Name "
+
+
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/tvRegEventDetail"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="end"
+            android:padding="4dp"
+            android:text="Event Details"
+            android:layout_weight="1"
+
+            android:textSize="14sp" />
+
+        <Button
+            android:id="@+id/btnRegEvent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:layout_weight="1"
+            android:text="Register" />
+    </LinearLayout>
+
+</LinearLayout>
