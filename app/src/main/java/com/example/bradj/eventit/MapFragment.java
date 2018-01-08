@@ -121,19 +121,8 @@ public class MapFragment extends Fragment {
 
         // Construct a FusedLocationProviderClient.
         mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(getActivity());
-        userService.getEvents().enqueue(new Callback<List<Event>>() {
-            @Override
-            public void onResponse(Call<List<Event>> call, Response<List<Event>> response) {
-                if(response.isSuccessful())
-                    MapFragment.this.eventList=response.body();
-            }
 
-            @Override
-            public void onFailure(Call<List<Event>> call, Throwable t) {
-                Log.i("events", t.getMessage());
-            }
-        });
-        ;
+
 
     }
     /**
@@ -279,11 +268,20 @@ public class MapFragment extends Fragment {
 //                CameraPosition cameraPosition = new CameraPosition.Builder().target(centerLocation).zoom(12).build();
 //                googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
                 googleMap.getUiSettings().setMyLocationButtonEnabled(true);
-                if(eventList!=null){
-                    plotMarkers(eventList);
-                    googleMap.setInfoWindowAdapter(new MyInfoWindowAdapter(getActivity()));
 
-                }
+                userService.getEvents().enqueue(new Callback<List<Event>>() {
+                    @Override
+                    public void onResponse(Call<List<Event>> call, Response<List<Event>> response) {
+                        if(response.isSuccessful()) MapFragment.this.eventList=response.body();
+                        plotMarkers(eventList);
+                        googleMap.setInfoWindowAdapter(new MyInfoWindowAdapter(getActivity()));
+                    }
+
+                    @Override
+                    public void onFailure(Call<List<Event>> call, Throwable t) {
+                        Log.i("events", t.getMessage());
+                    }
+                });
 
 
 

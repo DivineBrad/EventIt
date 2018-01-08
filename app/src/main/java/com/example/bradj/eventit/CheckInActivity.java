@@ -1,5 +1,6 @@
 package com.example.bradj.eventit;
 
+import android.content.Intent;
 import android.nfc.NdefMessage;
 import android.nfc.NdefRecord;
 import android.nfc.NfcAdapter;
@@ -8,6 +9,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Toast;
+
+import com.example.bradj.eventit.Model.Entity.RegisteredEvent;
+import com.google.gson.Gson;
 
 public class CheckInActivity extends AppCompatActivity implements NfcAdapter.CreateNdefMessageCallback{
 
@@ -35,9 +39,11 @@ public class CheckInActivity extends AppCompatActivity implements NfcAdapter.Cre
 
     @Override
     public NdefMessage createNdefMessage(NfcEvent nfcEvent) {
-        String message = "New Message";
+        Intent newIntent=getIntent();
+        String message = ""+getIntent().getIntExtra("event",4);
         NdefRecord ndefRecord = NdefRecord.createMime("text/plain", message.getBytes());
         NdefMessage ndefMessage = new NdefMessage(ndefRecord);
         return ndefMessage;
     }
+
 }

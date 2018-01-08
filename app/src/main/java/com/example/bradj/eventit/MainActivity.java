@@ -112,6 +112,7 @@ public class MainActivity extends AppCompatActivity
         fragmentTransaction.replace(R.id.container, dFragment);
         fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
+        setTitle("Dashboard");
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
@@ -172,14 +173,6 @@ public class MainActivity extends AppCompatActivity
                 setTitle(item.getTitle());
                 break;
 
-            case  R.id.events:
-                EventsFragment eFragment=EventsFragment.newInstance("a","b");
-                fragmentTransaction=getSupportFragmentManager().beginTransaction();
-                fragmentTransaction.replace(R.id.container, eFragment);
-                fragmentTransaction.addToBackStack(null);
-                fragmentTransaction.commit();
-                setTitle(item.getTitle());
-                break;
             case  R.id.regEvents:
                 RegisteredEventsFragment reFragment=RegisteredEventsFragment.newInstance("a","b");
                 fragmentTransaction=getSupportFragmentManager().beginTransaction();
@@ -188,6 +181,7 @@ public class MainActivity extends AppCompatActivity
                 fragmentTransaction.commit();
                 setTitle(item.getTitle());
                 break;
+
             case  R.id.organizations:
                 UserSubscribedOrganizationsFragment oFragment=UserSubscribedOrganizationsFragment.newInstance("a","b");
                 fragmentTransaction=getSupportFragmentManager().beginTransaction();

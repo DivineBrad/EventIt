@@ -7,7 +7,9 @@ package com.example.bradj.eventit.Model.Entity;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class Organization {
+import java.io.Serializable;
+
+public class Organization implements Serializable {
 
     @SerializedName("orgId")
     @Expose

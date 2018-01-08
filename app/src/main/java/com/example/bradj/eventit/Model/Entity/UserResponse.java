@@ -4,11 +4,12 @@ package com.example.bradj.eventit.Model.Entity;
  * Created by ajibd on 1/3/2018.
  */
 
+import java.io.Serializable;
 import java.util.List;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class UserResponse {
+public class UserResponse implements Serializable {
 
     @SerializedName("userId")
     @Expose

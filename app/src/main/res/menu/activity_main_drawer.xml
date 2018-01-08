@@ -19,11 +19,6 @@
             android:icon="@drawable/ic_menu_gallery"
             android:title="Subscribed Organizations"
             />
-        <item
-            android:id="@+id/events"
-            android:icon="@drawable/ic_menu_gallery"
-            android:title="Events"
-            />
 
     </group>
 

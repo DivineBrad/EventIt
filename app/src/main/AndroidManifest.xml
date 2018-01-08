@@ -42,7 +42,8 @@
             android:name=".RegisterActivity"
             android:label="@string/title_activity_register"
             android:parentActivityName=".SplashActivity" />
-        <activity android:name=".CheckInActivity" />
+        <activity android:name=".CheckInActivity"
+            android:parentActivityName=".MainActivity"/>
         <activity
             android:name=".MainActivity"
             android:label="@string/title_activity_main"
