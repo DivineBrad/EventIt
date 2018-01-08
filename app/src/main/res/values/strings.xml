@@ -1,8 +1,7 @@
 <resources>
-<!-- Spinners Array options -->
+    <!-- Spinners Array options -->
     <string-array name="event_access">
         <item>all</item>
-        <item>registered</item>
         <item>private</item>
         <item>public</item>
 

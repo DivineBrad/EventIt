@@ -1,5 +1,6 @@
 package com.example.bradj.eventit.Model.Adapter;
 
+import android.app.Activity;
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -10,6 +11,7 @@ import android.widget.TextView;
 import com.example.bradj.eventit.Model.Entity.RegisteredEvent;
 import com.example.bradj.eventit.R;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -21,14 +23,27 @@ public class RegisteredEventsAdapter extends RecyclerView.Adapter<RegisteredEven
     private Context context;
     private List<RegisteredEvent> dataList;
 
+    private Activity activity;
+
     public RegisteredEventsAdapter(Context context, List<RegisteredEvent> dataList) {
         this.context = context;
         this.dataList = dataList;
     }
 
+    public RegisteredEventsAdapter(Activity activity) {
+        this.dataList = new ArrayList<>();
+        this.activity = activity;
+
+    }
+    public void setDataList (List<RegisteredEvent> list) {
+        this.dataList=list;
+
+    }
+
+
     @Override
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view= LayoutInflater.from(parent.getContext()).inflate(R.layout.event_cell,parent,false);
+        View view= LayoutInflater.from(parent.getContext()).inflate(R.layout.event_reg_cell,parent,false);
         return new MyViewHolder(view);
     }
 
@@ -50,7 +65,7 @@ public class RegisteredEventsAdapter extends RecyclerView.Adapter<RegisteredEven
 
         public MyViewHolder(View itemView) {
             super(itemView);
-            tvEventDetail = (TextView) itemView.findViewById(R.id.tvEventDetail);
+            tvEventDetail = (TextView) itemView.findViewById(R.id.tvRegEventDetail);
         }
     }
 
