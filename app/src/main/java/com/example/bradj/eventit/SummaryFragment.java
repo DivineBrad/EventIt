@@ -64,7 +64,7 @@ public class SummaryFragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
-        eventList=((MainActivity)getActivity()).getEventList();
+//        eventList=((MainActivity)getActivity()).getEventList();
 
 
     }

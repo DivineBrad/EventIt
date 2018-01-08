@@ -66,12 +66,6 @@ public class DashboardFragment extends Fragment {
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
 
-//        MapFragment mapFragment=MapFragment.newInstance("","");
-//        FragmentTransaction fragmentTransaction=getFragmentManager().beginTransaction();
-//        fragmentTransaction.replace(R.id.mapContainer, mapFragment);
-//        fragmentTransaction.addToBackStack(null);
-//        fragmentTransaction.commit();
-
 
 
     }
@@ -102,6 +96,7 @@ public class DashboardFragment extends Fragment {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
                 viewPager.setCurrentItem(tab.getPosition());
+
             }
 
             @Override

@@ -14,8 +14,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.bradj.eventit.Model.Adapter.MyInfoWindowAdapter;
 import com.example.bradj.eventit.Model.Entity.Event;
-import com.example.bradj.eventit.Model.Entity.User;
+import com.example.bradj.eventit.Model.Service.ApiUtils;
+import com.example.bradj.eventit.Model.Service.UserService;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
@@ -27,16 +29,14 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.location.places.GeoDataClient;
-import com.google.android.gms.location.places.PlaceDetectionClient;
-import com.google.android.gms.location.places.PlaceLikelihood;
-import com.google.android.gms.location.places.PlaceLikelihoodBufferResponse;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.Executor;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 
 /**
@@ -78,6 +78,7 @@ public class MapFragment extends Fragment {
     private final LatLng mDefaultLocation = new LatLng(-33.8523341, 151.2106085);
     private static final int DEFAULT_ZOOM = 15;
     private List<Event> eventList;
+    private UserService userService;
 
     public MapFragment() {
         // Required empty public constructor
@@ -112,6 +113,7 @@ public class MapFragment extends Fragment {
             mLastKnownLocation = savedInstanceState.getParcelable(KEY_LOCATION);
             mCameraPosition = savedInstanceState.getParcelable(KEY_CAMERA_POSITION);
         }
+        userService= ApiUtils.getUserService();
 //        mGeoDataClient = Places.getGeoDataClient(this, null);
 //
 //        // Construct a PlaceDetectionClient.
@@ -119,8 +121,19 @@ public class MapFragment extends Fragment {
 
         // Construct a FusedLocationProviderClient.
         mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(getActivity());
-        if (((MainActivity)getActivity()).getEventList()!=null)
-            eventList=((MainActivity)getActivity()).getEventList();
+        userService.getEvents().enqueue(new Callback<List<Event>>() {
+            @Override
+            public void onResponse(Call<List<Event>> call, Response<List<Event>> response) {
+                if(response.isSuccessful())
+                    MapFragment.this.eventList=response.body();
+            }
+
+            @Override
+            public void onFailure(Call<List<Event>> call, Throwable t) {
+                Log.i("events", t.getMessage());
+            }
+        });
+        ;
 
     }
     /**

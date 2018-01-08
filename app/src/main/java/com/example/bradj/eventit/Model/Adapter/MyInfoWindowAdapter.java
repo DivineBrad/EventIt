@@ -1,10 +1,11 @@
-package com.example.bradj.eventit;
+package com.example.bradj.eventit.Model.Adapter;
 
 import android.app.Activity;
 import android.view.View;
 import android.widget.TextView;
 
 import com.example.bradj.eventit.Model.Entity.Event;
+import com.example.bradj.eventit.R;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.Marker;
 
