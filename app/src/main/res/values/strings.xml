@@ -1,5 +1,5 @@
 <resources>
-<!-- Spinners Array options -->
+    <!-- Spinners Array options -->
     <string-array name="event_access">
         <item>all</item>
         <item>registered</item>
@@ -71,4 +71,5 @@
     <string name="enter_password">Enter Password</string>
     <string name="title_activity_main2">Main2Activity</string>
     <string name="section_format">Hello World from section: %1$d</string>
+    <string name="unsubscribe">Unsubscribe</string>
 </resources>

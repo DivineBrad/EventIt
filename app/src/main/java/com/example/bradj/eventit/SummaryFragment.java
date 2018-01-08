@@ -2,33 +2,32 @@ package com.example.bradj.eventit;
 
 import android.content.Context;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
-import android.support.v4.view.ViewPager;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.example.bradj.eventit.Model.Adapter.DashboardFragmentPagerAdapter;
+import com.example.bradj.eventit.Model.Entity.Event;
+
+import java.util.List;
 
 
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link DashboardFragment.OnFragmentInteractionListener} interface
+ * {@link SummaryFragment.OnFragmentInteractionListener} interface
  * to handle interaction events.
- * Use the {@link DashboardFragment#newInstance} factory method to
+ * Use the {@link SummaryFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class DashboardFragment extends Fragment {
+public class SummaryFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
+    private List<Event> eventList;
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -36,7 +35,7 @@ public class DashboardFragment extends Fragment {
 
     private OnFragmentInteractionListener mListener;
 
-    public DashboardFragment() {
+    public SummaryFragment() {
         // Required empty public constructor
     }
 
@@ -46,11 +45,11 @@ public class DashboardFragment extends Fragment {
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
-     * @return A new instance of fragment DashboardFragment.
+     * @return A new instance of fragment SummaryFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static DashboardFragment newInstance(String param1, String param2) {
-        DashboardFragment fragment = new DashboardFragment();
+    public static SummaryFragment newInstance(String param1, String param2) {
+        SummaryFragment fragment = new SummaryFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -65,13 +64,7 @@ public class DashboardFragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
-
-//        MapFragment mapFragment=MapFragment.newInstance("","");
-//        FragmentTransaction fragmentTransaction=getFragmentManager().beginTransaction();
-//        fragmentTransaction.replace(R.id.mapContainer, mapFragment);
-//        fragmentTransaction.addToBackStack(null);
-//        fragmentTransaction.commit();
-
+        eventList=((MainActivity)getActivity()).getEventList();
 
 
     }
@@ -79,47 +72,8 @@ public class DashboardFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View rootView=inflater.inflate(R.layout.fragment_dashboard, container, false);
-
-//
-        final ViewPager viewPager = (ViewPager)rootView.findViewById(R.id.viewpager);
-        DashboardFragmentPagerAdapter pagerAdapter=new DashboardFragmentPagerAdapter(getChildFragmentManager(), getContext());
-        viewPager.setAdapter(pagerAdapter);
-
-        // Give the TabLayout the ViewPager
-        final TabLayout tabLayout = rootView.findViewById(R.id.sliding_tabs);
-        tabLayout.post(new Runnable() {
-            @Override
-            public void run() {
-                tabLayout.setupWithViewPager(viewPager);
-            }
-        });
-        tabLayout.addTab(tabLayout.newTab().setText("Map View"));
-        tabLayout.addTab(tabLayout.newTab().setText("Events"));
-
-        viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
-        tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
-            @Override
-            public void onTabSelected(TabLayout.Tab tab) {
-                viewPager.setCurrentItem(tab.getPosition());
-            }
-
-            @Override
-            public void onTabUnselected(TabLayout.Tab tab) {
-
-            }
-
-            @Override
-            public void onTabReselected(TabLayout.Tab tab) {
-
-            }
-        });
-
-
-
-
         // Inflate the layout for this fragment
-        return rootView;
+        return inflater.inflate(R.layout.fragment_summary, container, false);
     }
 
     // TODO: Rename method, update argument and hook method into UI event

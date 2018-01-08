@@ -1,6 +1,7 @@
 package com.example.bradj.eventit.Model.Service;
 
 import com.example.bradj.eventit.Model.Entity.Event;
+import com.example.bradj.eventit.Model.Entity.SubscribedOrg;
 import com.example.bradj.eventit.Model.Entity.User;
 import com.example.bradj.eventit.Model.Entity.UserResponse;
 
@@ -44,4 +45,7 @@ public interface UserService {
 
     @GET("/api/event")
     Call<List<Event>> getEvents();
+
 }
+
+
