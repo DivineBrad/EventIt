@@ -1,6 +1,7 @@
 package com.example.bradj.eventit.Model.Service;
 
 import com.example.bradj.eventit.Model.DataAccess.RetrofitClient;
+import com.example.bradj.eventit.Model.Entity.Organization;
 import com.example.bradj.eventit.Model.Entity.SubscribedOrg;
 
 /**
@@ -25,6 +26,10 @@ public class ApiUtils {
     public static SubscribedOrgService getSubscribedOrgService() {
         return RetrofitClient.getClient(BASE_URL).create(SubscribedOrgService.class);
     }
+    public static OrganizationService getOrganizationService() {
+        return RetrofitClient.getClient(BASE_URL).create(OrganizationService.class);
+    }
+
 
 }
 

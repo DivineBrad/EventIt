@@ -3,11 +3,11 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.bradj.eventit.OrganizationsFragment">
+    tools:context="com.example.bradj.eventit.SubscribedOrgFragment">
 
 
     <android.support.constraint.ConstraintLayout
-        android:id="@+id/Container"
+        android:id="@+id/subOrgsContainer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintTop_toBottomOf="@id/event_spinner_container"
@@ -15,14 +15,15 @@
         android:layout_weight="3"
         android:layout_marginTop="40dp"
         >
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/rvOrganizations"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginTop="8dp"
-        app:layout_constraintTop_toTopOf="@id/eventsContainer"
-        app:layout_constraintBottom_toBottomOf="parent"
-        />
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rvSubOrgs"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="8dp"
+            app:layout_constraintTop_toTopOf="@id/eventsContainer"
+            app:layout_constraintBottom_toBottomOf="parent"
+            />
 
     </android.support.constraint.ConstraintLayout>
+
 </FrameLayout>
