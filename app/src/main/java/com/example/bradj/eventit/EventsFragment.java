@@ -17,7 +17,9 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.example.bradj.eventit.Model.Adapter.EventsAdapter;
+import com.example.bradj.eventit.Model.Adapter.RegisteredEventsAdapter;
 import com.example.bradj.eventit.Model.Entity.Event;
+import com.example.bradj.eventit.Model.Entity.RegisteredEvent;
 import com.example.bradj.eventit.Model.Service.ApiUtils;
 import com.example.bradj.eventit.Model.Service.EventService;
 
@@ -48,8 +50,8 @@ public class EventsFragment extends Fragment implements AdapterView.OnItemSelect
     private String mParam2;
     private EventService mService;
     private RecyclerView recyclerView;
-    // private RegisteredEventsAdapter dataAdapter;
-    //private List<RegisteredEvent> dataArrayList;
+    private RegisteredEventsAdapter regEventsAdapter;
+    private List<RegisteredEvent> regEventsList;
     private EventsAdapter dataAdapter;
     private List<Event> dataArrayList;
     private static final String TAG = "EventsFragment";
@@ -104,6 +106,7 @@ public class EventsFragment extends Fragment implements AdapterView.OnItemSelect
         filteredList = new ArrayList<>();
         //initialize main arraylist of items
         dataArrayList = new ArrayList<>();
+        regEventsList = new ArrayList<>();
 
         // Get reference to recyler view
         recyclerView = (RecyclerView) rootView.findViewById(R.id.rvEvents);
@@ -111,7 +114,7 @@ public class EventsFragment extends Fragment implements AdapterView.OnItemSelect
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         dataAdapter = new EventsAdapter(getActivity());
         recyclerView.setAdapter(dataAdapter);
-        loadJSON();
+        loadEvents();
         // For xml string array resource
         ArrayAdapter<CharSequence> filterAdapter = ArrayAdapter.createFromResource(rootView.getContext(), R.array.event_access,
                 android.R.layout.simple_spinner_item);
@@ -137,6 +140,7 @@ public class EventsFragment extends Fragment implements AdapterView.OnItemSelect
 
 //                Toast toast = Toast.makeText(context, text, duration);
 //                toast.show();
+
                 filterList(access, category);
 
 
@@ -234,7 +238,7 @@ public class EventsFragment extends Fragment implements AdapterView.OnItemSelect
 
 
 
-    private void loadJSON() {
+    private void loadEvents() {
 
         mService = ApiUtils.getEventService();
         Call<List<Event>> call = mService.getEvents();
@@ -256,74 +260,102 @@ public class EventsFragment extends Fragment implements AdapterView.OnItemSelect
             }
         });
     }
-
+    // Filter the list except Registered Events
     private void filterList(final String access, final String category){
             if (dataArrayList.size()<1) {
                 dataArrayList = new ArrayList<>();
                 mService = ApiUtils.getEventService();
-                Call<List<Event>> call = mService.getEvents();
-                call.enqueue(new Callback<List<Event>>() {
-                    @Override
-                    public void onResponse(Call<List<Event>> call, Response<List<Event>> response) {
-                        dataArrayList = response.body();
-                        if (access.equals("all") && category.equals("all")) {
-                            dataAdapter.setDataList(dataArrayList);
-                        } else {
-                            filteredList.clear();
-                            for (Event ev : dataArrayList) {
-                                if (ev.getCategory().getType().equals(category)
-                                        && ev.getAccess().equals(access)) {
-                                    filteredList.add(ev);
+                if (access.equals("registered")){
+                    loadRegisteredEvents();
+                }
+                else {
+                    Call<List<Event>> call = mService.getEvents();
+                    call.enqueue(new Callback<List<Event>>() {
+                        @Override
+                        public void onResponse(Call<List<Event>> call, Response<List<Event>> response) {
+                            dataArrayList = response.body();
+                            if (access.equals("all") && category.equals("all")) {
+                                dataAdapter.setDataList(dataArrayList);
+                            } else {
+                                filteredList.clear();
+                                for (Event ev : dataArrayList) {
+                                    if (ev.getCategory().getType().equals(category)
+                                            && ev.getAccess().equals(access)) {
+                                        filteredList.add(ev);
+                                    }
                                 }
+                                dataAdapter.setDataList(filteredList);
                             }
-                            dataAdapter.setDataList(filteredList);
+
+                            dataAdapter.notifyDataSetChanged();
+                            Log.e("JsonData2", dataArrayList.get(0).getDescription());
+
+
                         }
 
-                        dataAdapter.notifyDataSetChanged();
-                        Log.e("JsonData2", dataArrayList.get(0).getDescription());
+                        @Override
+                        public void onFailure(Call<List<Event>> call, Throwable t) {
+                            Log.e("Error", t.getMessage());
 
-
-                    }
-
-                    @Override
-                    public void onFailure(Call<List<Event>> call, Throwable t) {
-                        Log.e("Error", t.getMessage());
-
-                    }
-                });
+                        }
+                    });
+                } // End of else if it is not RegisteredEvent
             }// End of if dataArraylist check condition
 
-        else {
-                if (access.equals("all") && category.equals("all")) {
-                    dataAdapter.setDataList(dataArrayList);
-                } else {
-                    filteredList.clear();
-                    for (Event ev : dataArrayList) {
-                        if (access.equals("all")){
-                            if (ev.getCategory().getType().equals(category)) {
-                                filteredList.add(ev);
-                            }
-                        }
-                        else if (category.equals("all")){
-                            if (ev.getAccess().equals(access)) {
-                                filteredList.add(ev);
-                        }
-                        else {
-                                if (ev.getAccess().equals(access) && ev.getCategory().getType().equals(category))
+        else{
+                    if (access.equals("all") && category.equals("all")) {
+                        dataAdapter.setDataList(dataArrayList);
+                    } else {
+                        filteredList.clear();
+                        for (Event ev : dataArrayList) {
+                            if (access.equals("all")) {
+                                if (ev.getCategory().getType().equals(category)) {
                                     filteredList.add(ev);
+                                }
+                            } else if (category.equals("all")) {
+                                if (ev.getAccess().equals(access)) {
+                                    filteredList.add(ev);
+                                } else {
+                                    if (ev.getAccess().equals(access) && ev.getCategory().getType().equals(category))
+                                        filteredList.add(ev);
+                                }
+
                             }
 
+                        }
+                        dataAdapter.setDataList(filteredList);
+                        dataAdapter.notifyDataSetChanged();
                     }
-
-                }
-                dataAdapter.setDataList(filteredList);
-                dataAdapter.notifyDataSetChanged();
-            }
 
     }
 
 }
-}
+            // Load Registered Events
 
+    private void loadRegisteredEvents() {
+
+        mService = ApiUtils.getEventService();
+        Call<List<RegisteredEvent>> call = mService.getRegisteredEvents();
+        call.enqueue(new Callback<List<RegisteredEvent>>() {
+            @Override
+            public void onResponse(Call<List<RegisteredEvent>> call, Response<List<RegisteredEvent>> response) {
+                regEventsList = response.body();
+                regEventsAdapter.setDataList(regEventsList);
+                regEventsAdapter.notifyDataSetChanged();
+                Log.e("JsonData", dataArrayList.get(0).getDescription());
+
+
+            }
+
+            @Override
+            public void onFailure(Call<List<RegisteredEvent>> call, Throwable t) {
+                Log.e("Error", t.getMessage());
+
+            }
+        });
+    }
+
+
+}
 
 

@@ -21,6 +21,9 @@ public interface RegisteredEventService {
     @GET("api/registration")
     @Headers("Content-Type: application/json;charset=UTF-8")
     Call<List<RegisteredEvent>> getRegisteredEvents();
+    @GET("api/registration/user/{id}")
+    @Headers("Content-Type: application/json;charset=UTF-8")
+    Call<List<RegisteredEvent>> getUserRegisteredEvents(@Path("id") long id);
     @POST("api/registration")
     @Headers("Content-Type: application/json;charset=UTF-8")
     Call<RegisteredEvent> addRegisteredEvent(@Body RegisteredEvent regEvent);
