@@ -60,8 +60,6 @@ public class MainActivity extends AppCompatActivity
     private RecyclerView recyclerView;
    // private RegisteredEventsAdapter dataAdapter;
     //private List<RegisteredEvent> dataArrayList;
-    private EventsAdapter dataAdapter;
-    private List<Event> dataArrayList;
     private List<Event> eventList;
 
     private User user;
@@ -102,23 +100,19 @@ public class MainActivity extends AppCompatActivity
             }
         });
 
-        userService.getEvents().enqueue(new Callback<List<Event>>() {
-            @Override
-            public void onResponse(Call<List<Event>> call, Response<List<Event>> response) {
-                if(response.isSuccessful())
-                MainActivity.this.eventList=response.body();
-            }
-
-            @Override
-            public void onFailure(Call<List<Event>> call, Throwable t) {
-                Log.i("events", t.getMessage());
-            }
-        });
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
+
+        FragmentTransaction fragmentTransaction;
+
+        DashboardFragment dFragment=DashboardFragment.newInstance("a","b");
+        fragmentTransaction=getSupportFragmentManager().beginTransaction();
+        fragmentTransaction.replace(R.id.container, dFragment);
+        fragmentTransaction.addToBackStack(null);
+        fragmentTransaction.commit();
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
@@ -211,14 +205,6 @@ public class MainActivity extends AppCompatActivity
 
 
 
-    }
-
-    public List<Event> getEventList() {
-        return eventList;
-    }
-
-    public void setEventList(List<Event> eventList) {
-        this.eventList = eventList;
     }
 
     public void logOut(MenuItem item) {
