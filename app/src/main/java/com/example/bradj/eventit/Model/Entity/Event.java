@@ -39,6 +39,12 @@ public class Event {
     @Expose
     private Category category;
 
+    //added, not mapped to db
+    @SerializedName("registered")
+    @Expose
+    private boolean registered ;
+
+
 
     /**
      * No args constructor for use in serialization

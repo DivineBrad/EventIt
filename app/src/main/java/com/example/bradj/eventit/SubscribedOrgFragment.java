@@ -12,9 +12,11 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.bradj.eventit.Model.Adapter.OrganizationsAdapter;
-import com.example.bradj.eventit.Model.Entity.Organization;
+import com.example.bradj.eventit.Model.Adapter.SubscribedOrgAdapter;
+import com.example.bradj.eventit.Model.Entity.SubscribedOrg;
+import com.example.bradj.eventit.Model.Entity.SubscribedOrg;
 import com.example.bradj.eventit.Model.Service.ApiUtils;
-import com.example.bradj.eventit.Model.Service.OrganizationService;
+import com.example.bradj.eventit.Model.Service.SubscribedOrgService;
 import com.example.bradj.eventit.Utilities.LoginUtil;
 
 import java.util.ArrayList;
@@ -28,12 +30,12 @@ import retrofit2.Response;
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link OrganizationsFragment.OnFragmentInteractionListener} interface
+ * {@link SubscribedOrgFragment.OnFragmentInteractionListener} interface
  * to handle interaction events.
- * Use the {@link OrganizationsFragment#newInstance} factory method to
+ * Use the {@link SubscribedOrgFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class OrganizationsFragment extends Fragment {
+public class SubscribedOrgFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -42,18 +44,15 @@ public class OrganizationsFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
-
     //My params
-    private OrganizationService mService;
+    private SubscribedOrgService mService;
     private RecyclerView recyclerView;
-    private OrganizationsAdapter dataAdapter;
-    private List<Organization> dataArrayList;
-
-
+    private SubscribedOrgAdapter dataAdapter;
+    private List<SubscribedOrg> dataArrayList;
 
     private OnFragmentInteractionListener mListener;
 
-    public OrganizationsFragment() {
+    public SubscribedOrgFragment() {
         // Required empty public constructor
     }
 
@@ -63,11 +62,11 @@ public class OrganizationsFragment extends Fragment {
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
-     * @return A new instance of fragment OrganizationsFragment.
+     * @return A new instance of fragment SubscribedOrgFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static OrganizationsFragment newInstance(String param1, String param2) {
-        OrganizationsFragment fragment = new OrganizationsFragment();
+    public static SubscribedOrgFragment newInstance(String param1, String param2) {
+        SubscribedOrgFragment fragment = new SubscribedOrgFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -89,23 +88,22 @@ public class OrganizationsFragment extends Fragment {
                              Bundle savedInstanceState) {
 
         // Inflate the layout for this fragment
-        View rootView = inflater.inflate(R.layout.fragment_organizations, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_subscribed_org, container, false);
 
         //initialize main arraylist of items
         dataArrayList = new ArrayList<>();
 
 
         // Get reference to recyler view
-        recyclerView = (RecyclerView) rootView.findViewById(R.id.rvOrganizations);
+        recyclerView = (RecyclerView) rootView.findViewById(R.id.rvSubOrgs);
         // Set Layout Manager
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        dataAdapter = new OrganizationsAdapter(getActivity());
+        dataAdapter = new SubscribedOrgAdapter(getActivity());
         recyclerView.setAdapter(dataAdapter);
         loadOrgs();
 
 
         return rootView;
-
 
     }
 
@@ -151,21 +149,21 @@ public class OrganizationsFragment extends Fragment {
     private void loadOrgs() {
         int userId = getContext().getSharedPreferences(LoginUtil.PREFS_NAME,Context.MODE_PRIVATE).getInt("user id",0);
 
-        mService = ApiUtils.getOrganizationService();
-        Call<List<Organization>> call = mService.getOrganizations();
-        call.enqueue(new Callback<List<Organization>>() {
+        mService = ApiUtils.getSubscribedOrgService();
+        Call<List<SubscribedOrg>> call = mService.getUserSubscribedOrgs(userId);
+        call.enqueue(new Callback<List<SubscribedOrg>>() {
             @Override
-            public void onResponse(Call<List<Organization>> call, Response<List<Organization>> response) {
+            public void onResponse(Call<List<SubscribedOrg>> call, Response<List<SubscribedOrg>> response) {
                 dataArrayList = response.body();
                 dataAdapter.setDataList(dataArrayList);
                 dataAdapter.notifyDataSetChanged();
-                Log.e("JsonData", dataArrayList.get(0).getName());
+                Log.e("JsonData", dataArrayList.get(0).getOrganization().getName());
 
 
             }
 
             @Override
-            public void onFailure(Call<List<Organization>> call, Throwable t) {
+            public void onFailure(Call<List<SubscribedOrg>> call, Throwable t) {
                 Log.e("Error", t.getMessage());
 
             }

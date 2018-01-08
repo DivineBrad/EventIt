@@ -52,7 +52,8 @@ import retrofit2.Response;
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, DashboardFragment.OnFragmentInteractionListener, MapFragment.OnFragmentInteractionListener,
         EventsFragment.OnFragmentInteractionListener,
-        RegisteredEventsFragment.OnFragmentInteractionListener,UserSubscribedOrganizationsFragment.OnFragmentInteractionListener{
+        RegisteredEventsFragment.OnFragmentInteractionListener,SubscribedOrgFragment.OnFragmentInteractionListener,
+        OrganizationsFragment.OnFragmentInteractionListener{
 
     private LoginUtil loginUtil;
     private EventService mService;
@@ -195,7 +196,7 @@ public class MainActivity extends AppCompatActivity
                 setTitle(item.getTitle());
                 break;
             case  R.id.organizations:
-                UserSubscribedOrganizationsFragment oFragment=UserSubscribedOrganizationsFragment.newInstance("a","b");
+              SubscribedOrgFragment oFragment=SubscribedOrgFragment.newInstance("a","b");
                 fragmentTransaction=getSupportFragmentManager().beginTransaction();
                 fragmentTransaction.replace(R.id.container, oFragment);
                 fragmentTransaction.addToBackStack(null);
