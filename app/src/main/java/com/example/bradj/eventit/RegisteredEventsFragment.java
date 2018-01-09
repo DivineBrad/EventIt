@@ -165,7 +165,7 @@ public class RegisteredEventsFragment extends Fragment implements AdapterView.On
 
 
     private void loadEvents() {
-        int userId = getContext().getSharedPreferences(LoginUtil.PREFS_NAME,Context.MODE_PRIVATE).getInt("user id",0);
+        int userId = getContext().getSharedPreferences(LoginUtil.PREFS_NAME, Context.MODE_PRIVATE).getInt("user id", 0);
 
         mService = ApiUtils.getRegisteredEventService();
         Call<List<RegisteredEvent>> call = mService.getUserRegisteredEvents(userId);
@@ -187,6 +187,11 @@ public class RegisteredEventsFragment extends Fragment implements AdapterView.On
             }
         });
     }
+        public void onClickUpdate (View view){
+
+
+    }
+
 
 
 
