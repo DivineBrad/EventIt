@@ -2,15 +2,21 @@ package com.example.bradj.eventit.Model.Adapter;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
+import com.example.bradj.eventit.CheckInActivity;
+import com.example.bradj.eventit.Model.Entity.Event;
 import com.example.bradj.eventit.Model.Entity.RegisteredEvent;
 import com.example.bradj.eventit.R;
+import com.example.bradj.eventit.RegisteredEventsFragment;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,9 +36,9 @@ public class RegisteredEventsAdapter extends RecyclerView.Adapter<RegisteredEven
         this.dataList = dataList;
     }
 
-    public RegisteredEventsAdapter(Activity activity) {
+    public RegisteredEventsAdapter(Context context) {
         this.dataList = new ArrayList<>();
-        this.activity = activity;
+        this.context = context;
 
     }
     public void setDataList (List<RegisteredEvent> list) {
@@ -50,6 +56,18 @@ public class RegisteredEventsAdapter extends RecyclerView.Adapter<RegisteredEven
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
         holder.tvEventDetail.setText(dataList.get(position).getEvent().getName());
+        final RegisteredEvent event=dataList.get(position);
+        holder.btnCheckIn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                Intent intent=new Intent(context, CheckInActivity.class);
+                intent.putExtra("event",event.getRegId());
+                context.startActivity(intent);
+
+
+            }
+        });
 
 
     }
@@ -62,10 +80,12 @@ public class RegisteredEventsAdapter extends RecyclerView.Adapter<RegisteredEven
     public class MyViewHolder extends RecyclerView.ViewHolder{
 
         public TextView tvEventDetail;
+        public Button btnCheckIn;
 
         public MyViewHolder(View itemView) {
             super(itemView);
             tvEventDetail = (TextView) itemView.findViewById(R.id.tvRegEventDetail);
+            btnCheckIn=(Button)itemView.findViewById(R.id.btnRegEvent);
         }
     }
 

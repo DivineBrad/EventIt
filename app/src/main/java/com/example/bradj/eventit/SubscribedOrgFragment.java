@@ -10,6 +10,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.bradj.eventit.Model.Adapter.OrganizationsAdapter;
 import com.example.bradj.eventit.Model.Adapter.SubscribedOrgAdapter;
@@ -51,6 +53,7 @@ public class SubscribedOrgFragment extends Fragment {
     private List<SubscribedOrg> dataArrayList;
 
     private OnFragmentInteractionListener mListener;
+    private TextView statusText;
 
     public SubscribedOrgFragment() {
         // Required empty public constructor
@@ -89,7 +92,7 @@ public class SubscribedOrgFragment extends Fragment {
 
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_subscribed_org, container, false);
-
+        statusText=(TextView)rootView.findViewById(R.id.subscribedOrgStatus);
         //initialize main arraylist of items
         dataArrayList = new ArrayList<>();
 
@@ -154,10 +157,24 @@ public class SubscribedOrgFragment extends Fragment {
         call.enqueue(new Callback<List<SubscribedOrg>>() {
             @Override
             public void onResponse(Call<List<SubscribedOrg>> call, Response<List<SubscribedOrg>> response) {
-                dataArrayList = response.body();
-                dataAdapter.setDataList(dataArrayList);
-                dataAdapter.notifyDataSetChanged();
-                Log.e("JsonData", dataArrayList.get(0).getOrganization().getName());
+                if (response.isSuccessful()) {
+                    if (response.body() == null) {
+                        statusText.setText(R.string.no_sub_org);
+                        statusText.setVisibility(View.VISIBLE);
+                    }
+                    else{
+                        dataArrayList = response.body();
+                        dataAdapter.setDataList(dataArrayList);
+                        dataAdapter.notifyDataSetChanged();
+                        Log.e("JsonData", dataArrayList.get(0).getOrganization().getName());
+                    }
+                }
+                else{
+                    Toast.makeText(getContext(), "Error getting Organizations List", Toast.LENGTH_SHORT).show();
+                    statusText.setText(R.string.no_sub_org);
+                    statusText.setVisibility(View.VISIBLE);
+                }
+
 
 
             }

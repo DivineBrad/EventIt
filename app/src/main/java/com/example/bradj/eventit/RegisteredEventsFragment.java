@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import com.example.bradj.eventit.Model.Adapter.EventsAdapter;
 import com.example.bradj.eventit.Model.Adapter.RegisteredEventsAdapter;
@@ -51,7 +52,8 @@ public class RegisteredEventsFragment extends Fragment implements AdapterView.On
     private RecyclerView recyclerView;
     private List<RegisteredEvent> regEventsList;
     private RegisteredEventsAdapter dataAdapter;
-    private List<RegisteredEvent> dataArrayList;
+    private List<RegisteredEvent> dataArrayList=new ArrayList<RegisteredEvent>();
+    private TextView statusText;
 
 
     private RegisteredEventsFragment.OnFragmentInteractionListener mListener;
@@ -100,9 +102,10 @@ public class RegisteredEventsFragment extends Fragment implements AdapterView.On
 
         // Get reference to recyler view
         recyclerView = (RecyclerView) rootView.findViewById(R.id.rvRegisteredEvents);
+        statusText=(TextView) rootView.findViewById(R.id.status_text);
         // Set Layout Manager
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        dataAdapter = new RegisteredEventsAdapter(getActivity());
+        dataAdapter = new RegisteredEventsAdapter(getContext());
         recyclerView.setAdapter(dataAdapter);
         loadEvents();
 
@@ -172,10 +175,19 @@ public class RegisteredEventsFragment extends Fragment implements AdapterView.On
         call.enqueue(new Callback<List<RegisteredEvent>>() {
             @Override
             public void onResponse(Call<List<RegisteredEvent>> call, Response<List<RegisteredEvent>> response) {
-                dataArrayList = response.body();
-                dataAdapter.setDataList(dataArrayList);
-                dataAdapter.notifyDataSetChanged();
-                Log.e("JsonData", dataArrayList.get(0).getDescription());
+                if (response.isSuccessful()){
+                    if(response.body()==null){
+                        statusText.setText("You haven't registered for any events");
+                        statusText.setVisibility(View.VISIBLE);
+                    }
+                    else{
+                        dataArrayList = response.body();
+                        dataAdapter.setDataList(dataArrayList);
+                        dataAdapter.notifyDataSetChanged();
+                        Log.e("JsonData", dataArrayList.get(0).getDescription());
+                    }
+                }
+
 
 
             }

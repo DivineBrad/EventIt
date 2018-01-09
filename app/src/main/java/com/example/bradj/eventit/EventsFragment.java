@@ -270,6 +270,7 @@ public class EventsFragment extends Fragment implements AdapterView.OnItemSelect
                     call.enqueue(new Callback<List<Event>>() {
                         @Override
                         public void onResponse(Call<List<Event>> call, Response<List<Event>> response) {
+
                             dataArrayList = response.body();
                             if (access.equals("all") && category.equals("all")) {
                                 dataAdapter.setDataList(dataArrayList);
