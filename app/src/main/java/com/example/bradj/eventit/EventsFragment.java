@@ -51,7 +51,7 @@ public class EventsFragment extends Fragment implements AdapterView.OnItemSelect
     private EventService mService;
     private RecyclerView recyclerView;
     private RegisteredEventsAdapter regEventsAdapter;
-    private List<RegisteredEvent> regEventsList;
+   // private List<RegisteredEvent> regEventsList;
     private EventsAdapter dataAdapter;
     private List<Event> dataArrayList;
     private static final String TAG = "EventsFragment";
@@ -106,7 +106,7 @@ public class EventsFragment extends Fragment implements AdapterView.OnItemSelect
         filteredList = new ArrayList<>();
         //initialize main arraylist of items
         dataArrayList = new ArrayList<>();
-        regEventsList = new ArrayList<>();
+       // regEventsList = new ArrayList<>();
 
         // Get reference to recyler view
         recyclerView = (RecyclerView) rootView.findViewById(R.id.rvEvents);
@@ -265,10 +265,7 @@ public class EventsFragment extends Fragment implements AdapterView.OnItemSelect
             if (dataArrayList.size()<1) {
                 dataArrayList = new ArrayList<>();
                 mService = ApiUtils.getEventService();
-                if (access.equals("registered")){
-                    loadRegisteredEvents();
-                }
-                else {
+
                     Call<List<Event>> call = mService.getEvents();
                     call.enqueue(new Callback<List<Event>>() {
                         @Override
@@ -299,7 +296,7 @@ public class EventsFragment extends Fragment implements AdapterView.OnItemSelect
 
                         }
                     });
-                } // End of else if it is not RegisteredEvent
+
             }// End of if dataArraylist check condition
 
         else{
@@ -330,30 +327,6 @@ public class EventsFragment extends Fragment implements AdapterView.OnItemSelect
     }
 
 }
-            // Load Registered Events
-
-    private void loadRegisteredEvents() {
-
-        mService = ApiUtils.getEventService();
-        Call<List<RegisteredEvent>> call = mService.getRegisteredEvents();
-        call.enqueue(new Callback<List<RegisteredEvent>>() {
-            @Override
-            public void onResponse(Call<List<RegisteredEvent>> call, Response<List<RegisteredEvent>> response) {
-                regEventsList = response.body();
-                regEventsAdapter.setDataList(regEventsList);
-                regEventsAdapter.notifyDataSetChanged();
-                Log.e("JsonData", dataArrayList.get(0).getDescription());
-
-
-            }
-
-            @Override
-            public void onFailure(Call<List<RegisteredEvent>> call, Throwable t) {
-                Log.e("Error", t.getMessage());
-
-            }
-        });
-    }
 
 
 }
