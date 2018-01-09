@@ -6,23 +6,20 @@
     tools:context="com.example.bradj.eventit.OrganizationsFragment">
 
 
-    <android.support.constraint.ConstraintLayout
+    <android.support.v7.widget.LinearLayoutCompat
         android:id="@+id/Container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/event_spinner_container"
-        app:layout_constraintBottom_toBottomOf="parent"
-        android:layout_weight="3"
-        android:layout_marginTop="40dp"
+
+
         >
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rvOrganizations"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="8dp"
-        app:layout_constraintTop_toTopOf="@id/eventsContainer"
-        app:layout_constraintBottom_toBottomOf="parent"
+
         />
 
-    </android.support.constraint.ConstraintLayout>
+    </android.support.v7.widget.LinearLayoutCompat>
 </FrameLayout>
