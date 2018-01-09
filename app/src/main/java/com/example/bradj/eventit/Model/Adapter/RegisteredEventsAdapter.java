@@ -85,7 +85,7 @@ public class RegisteredEventsAdapter extends RecyclerView.Adapter<RegisteredEven
         public MyViewHolder(View itemView) {
             super(itemView);
             tvEventDetail = (TextView) itemView.findViewById(R.id.tvRegEventDetail);
-            btnCheckIn=(Button)itemView.findViewById(R.id.btnCheckIn);
+            btnCheckIn=(Button)itemView.findViewById(R.id.btnRegEvent);
         }
     }
 

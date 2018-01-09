@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.example.bradj.eventit.Model.Adapter.EventsAdapter;
 import com.example.bradj.eventit.Model.Adapter.UserSubscribedOrganizationAdapter;
@@ -53,6 +54,7 @@ public class UserSubscribedOrganizationsFragment extends Fragment {
 
 
     private OnFragmentInteractionListener mListener;
+    private TextView statusText;
 
     public UserSubscribedOrganizationsFragment() {
         // Required empty public constructor
