@@ -3,6 +3,7 @@ package com.example.bradj.eventit;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -109,7 +110,13 @@ public class RegisteredEventsFragment extends Fragment implements AdapterView.On
         recyclerView.setAdapter(dataAdapter);
         loadEvents();
 
-
+        FloatingActionButton floatingActionButton=(FloatingActionButton) rootView.findViewById(R.id.floatingActionButton);
+        floatingActionButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                loadEvents();
+            }
+        });
         return rootView;
 
     }
@@ -167,8 +174,9 @@ public class RegisteredEventsFragment extends Fragment implements AdapterView.On
 
 
 
-    private void loadEvents() {
-        int userId = getContext().getSharedPreferences(LoginUtil.PREFS_NAME, Context.MODE_PRIVATE).getInt("user id", 0);
+    public void loadEvents() {
+
+        int userId = getContext().getSharedPreferences(LoginUtil.PREFS_NAME,Context.MODE_PRIVATE).getInt("user id",0);
 
         mService = ApiUtils.getRegisteredEventService();
         Call<List<RegisteredEvent>> call = mService.getUserRegisteredEvents(userId);
@@ -199,11 +207,6 @@ public class RegisteredEventsFragment extends Fragment implements AdapterView.On
             }
         });
     }
-        public void onClickUpdate (View view){
-
-
-    }
-
 
 
 

@@ -3,51 +3,22 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-
-
-    <LinearLayout
-        android:id="@+id/orgLayout"
-        android:layout_width="match_parent"
+    <TextView
+        android:id="@+id/tvSubOrgDetail"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:padding="2dp"
-        android:layout_weight="2"
-        style=""
-
-        >
-
-        <TextView
-            android:id="@+id/tvSubOrg"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Organizaion: "
-            android:textSize="10sp"
-            android:padding="4dp"
-
-            android:textAlignment="center"
-            android:gravity="start"
-            android:layout_marginRight="4dp"
-            />
-        <TextView
-            android:id="@+id/tvSubOrgDetail"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Phone "
-            android:textSize="10sp"
-            android:padding="4dp"
-
-            android:textAlignment="center"
-            android:gravity="end"
-            android:layout_marginRight="4dp"
-            />
-
-
-
-    </LinearLayout>
-
-
-
-
+        android:layout_weight="1"
+        android:text="Detail"
+        android:textSize="10sp"
+        android:padding="4dp"
+        android:textAlignment="center"
+        android:gravity="end"
+        android:layout_marginRight="4dp"
+        />
+    <Button
+        android:id="@+id/btnUnSub_Org"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Unsubscribe"/>
 
 </LinearLayout>

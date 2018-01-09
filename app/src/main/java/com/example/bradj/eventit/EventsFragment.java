@@ -273,7 +273,8 @@ public class EventsFragment extends Fragment implements AdapterView.OnItemSelect
 
                             dataArrayList = response.body();
                             if (access.equals("all") && category.equals("all")) {
-                                dataAdapter.setDataList(dataArrayList);
+                                //dataAdapter.setDataList(dataArrayList);
+                                loadEvents();
                             } else {
                                 filteredList.clear();
                                 for (Event ev : dataArrayList) {

@@ -73,6 +73,8 @@ public class MainActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        final View hView =  navigationView.getHeaderView(0);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         loginUtil= LoginUtil.getInstance();
@@ -85,8 +87,8 @@ public class MainActivity extends AppCompatActivity
             public void onResponse(Call<User> call, Response<User> response) {
                 if(response.isSuccessful()){
                     MainActivity.this.user=response.body();
-                    userDetails=findViewById(R.id.display_userInfo);
-                    userEmail=findViewById(R.id.display_userEmail);
+                    userDetails=hView.findViewById(R.id.display_userInfo);
+                    userEmail=hView.findViewById(R.id.display_userEmail);
 
                     userDetails.setText(user.getFirstName()+" "+user.getLastName());
                     userEmail.setText(user.getEmail());
@@ -115,7 +117,6 @@ public class MainActivity extends AppCompatActivity
         fragmentTransaction.commit();
         setTitle("Dashboard");
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
     }
 
