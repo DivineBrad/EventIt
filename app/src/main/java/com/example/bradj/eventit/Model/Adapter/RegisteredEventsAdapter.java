@@ -4,21 +4,30 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.bradj.eventit.CheckInActivity;
+import com.example.bradj.eventit.MainActivity;
 import com.example.bradj.eventit.Model.Entity.Event;
 import com.example.bradj.eventit.Model.Entity.RegisteredEvent;
+import com.example.bradj.eventit.Model.Service.ApiUtils;
 import com.example.bradj.eventit.R;
 import com.example.bradj.eventit.RegisteredEventsFragment;
+import com.example.bradj.eventit.Utilities.LoginUtil;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 /**
  * Created by Bradley Blanchard on 2018-01-06.
@@ -56,7 +65,12 @@ public class RegisteredEventsAdapter extends RecyclerView.Adapter<RegisteredEven
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
         holder.tvEventDetail.setText(dataList.get(position).getEvent().getName());
+
         final RegisteredEvent event=dataList.get(position);
+        if (event.getCheckedin()==1){
+            holder.btnCheckIn.setText("Checked in");
+            holder.btnCheckIn.setEnabled(false);
+        }
         holder.btnCheckIn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -65,12 +79,13 @@ public class RegisteredEventsAdapter extends RecyclerView.Adapter<RegisteredEven
                 intent.putExtra("event",event.getRegId());
                 context.startActivity(intent);
 
-
+                Toast.makeText(context, "Refresh the list to View Changes", Toast.LENGTH_LONG   ).show();
             }
         });
 
 
     }
+
 
     @Override
     public int getItemCount() {
