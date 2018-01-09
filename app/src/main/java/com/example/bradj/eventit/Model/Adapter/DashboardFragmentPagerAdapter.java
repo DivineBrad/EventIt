@@ -8,14 +8,15 @@ import android.support.v4.app.FragmentPagerAdapter;
 import com.example.bradj.eventit.DashboardFragment;
 import com.example.bradj.eventit.EventsFragment;
 import com.example.bradj.eventit.MapFragment;
+import com.example.bradj.eventit.OrganizationsFragment;
 
 /**
  * Created by ajibd on 1/7/2018.
  */
 
 public class DashboardFragmentPagerAdapter extends FragmentPagerAdapter {
-    final int PAGE_COUNT = 2;
-    private String tabTitles[] = new String[] { "Map View", "Private Events" };
+    final int PAGE_COUNT = 3;
+    private String tabTitles[] = new String[] { "Map View", "Events", "Organizations" };
     private Context context;
 
     public DashboardFragmentPagerAdapter(FragmentManager fm, Context context) {
@@ -38,6 +39,9 @@ public class DashboardFragmentPagerAdapter extends FragmentPagerAdapter {
             case 1:
                 Fragment tab2 = new EventsFragment();
                 return tab2;
+            case 2:
+                Fragment tab3 = new OrganizationsFragment();
+                return tab3;
             default:
                 return null;
         }
