@@ -35,6 +35,8 @@ import com.example.bradj.eventit.Model.Entity.User;
 import com.example.bradj.eventit.Model.Service.ApiUtils;
 import com.example.bradj.eventit.Model.Service.UserService;
 import com.example.bradj.eventit.Utilities.LoginUtil;
+import com.google.gson.Gson;
+import com.pixplicity.easyprefs.library.Prefs;
 
 import java.io.IOException;
 
@@ -79,28 +81,13 @@ public class MainActivity extends AppCompatActivity
         setSupportActionBar(toolbar);
         loginUtil= LoginUtil.getInstance();
         userService= ApiUtils.getUserService();
-        int userId=getApplicationContext().getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE).getInt("user id",0);
-        user=new User();
-        userService.getUser(""+userId).enqueue(new Callback<User>() {
+        Gson gson=new Gson();
+        user=gson.fromJson(Prefs.getString("user object",""), User.class);
+        userDetails=hView.findViewById(R.id.display_userInfo);
+        userEmail=hView.findViewById(R.id.display_userEmail);
 
-            @Override
-            public void onResponse(Call<User> call, Response<User> response) {
-                if(response.isSuccessful()){
-                    MainActivity.this.user=response.body();
-                    userDetails=hView.findViewById(R.id.display_userInfo);
-                    userEmail=hView.findViewById(R.id.display_userEmail);
-
-                    userDetails.setText(user.getFirstName()+" "+user.getLastName());
-                    userEmail.setText(user.getEmail());
-
-                }
-            }
-
-            @Override
-            public void onFailure(Call<User> call, Throwable t) {
-
-            }
-        });
+        userDetails.setText(user.getFirstName()+" "+user.getLastName());
+        userEmail.setText(user.getEmail());
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(

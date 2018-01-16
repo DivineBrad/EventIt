@@ -334,7 +334,8 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                     @Override
                     public void onResponse(Call<User> call, Response<User> response) {
                         if(response.isSuccessful()) {
-                            loginUtil.createUserSession(getApplicationContext(),response.body().getUserId());
+                            User user=response.body();
+                            loginUtil.createUserSession(getApplicationContext(),response.body().getUserId(), user);
                             Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                             startActivity(intent);
                             finish();
