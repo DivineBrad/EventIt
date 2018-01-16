@@ -6,20 +6,17 @@
     tools:context="com.example.bradj.eventit.OrganizationsFragment">
 
 
-    <android.support.v7.widget.LinearLayoutCompat
-        android:id="@+id/Container"
-        android:layout_width="match_parent"
+    <TextView
+        android:id="@+id/txtSubOrgStatus"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:textAppearance="@style/TextAppearance.Design.Error"
+        android:textSize="14sp" />
 
-
-        >
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rvOrganizations"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="8dp" />
 
-        />
-
-    </android.support.v7.widget.LinearLayoutCompat>
 </FrameLayout>

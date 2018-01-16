@@ -29,11 +29,11 @@ public interface SubscribedOrgService {
     @Headers("Content-Type: application/json;charset=UTF-8")
     Call<List<SubscribedOrg>> getUserSubscribedOrgs(@Path ("id") long id);
 
-    @DELETE("api/subscribed-org/{id}")
+    @DELETE("/api/subscribed-org/{id}")
     @Headers("Content-Type: application/json;charset=UTF-8")
     Call<SubscribedOrg> deleteSubscribedOrg(@Path("id") long id);
 
-    @POST("api/subscribed-org")
+    @POST("/api/subscribed-org")
     @Headers("Content-Type: application/json;charset=UTF-8")
     Call<SubscribedOrg> addSubscribedOrg(@Body SubscribedOrg sOrg);
 }

@@ -28,6 +28,8 @@ public interface OrganizationService {
     @DELETE("api/organization/{id}")
     @Headers("Content-Type: application/json;charset=UTF-8")
     Call<Organization> deleteOrganization(@Path ("id") long id);
+
+
     
     
 }

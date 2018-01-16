@@ -1,54 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="wrap_content"
+    android:padding="8dp"
+    android:orientation="horizontal">
 
-
-
-    <LinearLayout
-        android:id="@+id/orgLayout"
-        android:layout_width="match_parent"
+    <TextView
+        android:id="@+id/tvOrgDetail"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:padding="2dp"
-        android:layout_weight="2"
-        android:layout_marginTop="40dp"
-        style=""
+        android:layout_marginRight="4dp"
+        android:layout_weight="1"
+        android:gravity="start"
+        android:padding="4dp"
 
-        >
+        android:text="Name "
 
-        <TextView
-            android:id="@+id/tvOrg"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Organizaion: "
-            android:textSize="10sp"
-            android:padding="4dp"
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
 
-            android:textAlignment="center"
-            android:gravity="start"
-            android:layout_marginRight="4dp"
-            />
-        <TextView
-            android:id="@+id/tvOrgDetail"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Phone "
-            android:textSize="10sp"
-            android:padding="4dp"
-
-            android:textAlignment="center"
-            android:gravity="end"
-            android:layout_marginRight="4dp"
-            />
-
-
-
-    </LinearLayout>
-
-
-
-
-
+    <Button
+        android:id="@+id/btnSubscribeOrg"
+        android:layout_width="25dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:text="Subscribe"
+        />
 </LinearLayout>

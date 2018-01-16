@@ -15,6 +15,12 @@ public class SubscribedOrg implements Serializable {
     @SerializedName("user")
     @Expose
     private User user;
+    @SerializedName("org_id")
+    @Expose
+    private long org_id;
+    @SerializedName("user_id")
+    @Expose
+    private long user_id;
     @SerializedName("organization")
     @Expose
     private Organization organization;
@@ -49,5 +55,21 @@ public class SubscribedOrg implements Serializable {
 
     public void setOrganization(Organization organization) {
         this.organization = organization;
+    }
+
+    public Long getOrg_id() {
+        return org_id;
+    }
+
+    public void setOrg_id(Long org_id) {
+        this.org_id = org_id;
+    }
+
+    public Long getUser_id() {
+        return user_id;
+    }
+
+    public void setUser_id(Long user_id) {
+        this.user_id = user_id;
     }
 }

@@ -13,8 +13,10 @@ import android.view.ViewGroup;
 
 import com.example.bradj.eventit.Model.Adapter.OrganizationsAdapter;
 import com.example.bradj.eventit.Model.Entity.Organization;
+import com.example.bradj.eventit.Model.Entity.SubscribedOrg;
 import com.example.bradj.eventit.Model.Service.ApiUtils;
 import com.example.bradj.eventit.Model.Service.OrganizationService;
+import com.example.bradj.eventit.Model.Service.SubscribedOrgService;
 import com.example.bradj.eventit.Utilities.LoginUtil;
 
 import java.util.ArrayList;
@@ -45,9 +47,11 @@ public class OrganizationsFragment extends Fragment {
 
     //My params
     private OrganizationService mService;
+    private SubscribedOrgService subService;
     private RecyclerView recyclerView;
     private OrganizationsAdapter dataAdapter;
     private List<Organization> dataArrayList;
+    private List <SubscribedOrg>  subscribedOrgList;
 
 
 
@@ -166,6 +170,29 @@ public class OrganizationsFragment extends Fragment {
 
             @Override
             public void onFailure(Call<List<Organization>> call, Throwable t) {
+                Log.e("Error", t.getMessage());
+
+            }
+        });
+    }
+    // Add user id param
+    private void loadSubscribedOrgs (){
+        subService = ApiUtils.getSubscribedOrgService();
+
+        Call<List<SubscribedOrg>> call = subService.getUserSubscribedOrgs(1);
+        call.enqueue(new Callback<List<SubscribedOrg>>() {
+            @Override
+            public void onResponse(Call<List<SubscribedOrg>> call, Response<List<SubscribedOrg>> response) {
+                subscribedOrgList = response.body();
+                dataAdapter.setDataList(dataArrayList);
+                dataAdapter.notifyDataSetChanged();
+                Log.e("JsonData", dataArrayList.get(0).getName());
+
+
+            }
+
+            @Override
+            public void onFailure(Call<List<SubscribedOrg>> call, Throwable t) {
                 Log.e("Error", t.getMessage());
 
             }

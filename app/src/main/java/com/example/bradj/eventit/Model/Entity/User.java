@@ -8,7 +8,7 @@ public class User implements Serializable {
 
     @SerializedName("userId")
     @Expose
-    private int userId;
+    private long userId;
     @SerializedName("userName")
     @Expose
     private String userName;
@@ -60,11 +60,11 @@ public class User implements Serializable {
         this.lastName = lastName;
     }
 
-    public int getUserId() {
+    public long getUserId() {
         return userId;
     }
 
-    public void setUserId(int userId) {
+    public void setUserId(long userId) {
         this.userId = userId;
     }
 

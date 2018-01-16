@@ -36,9 +36,9 @@ public class LoginUtil  {
                 .edit().putBoolean("LOGGED", value).apply();
     }
 
-    public void createUserSession(@NonNull Context context, int id){
+    public void createUserSession(@NonNull Context context, long id){
         context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
-                .edit().putInt("user id", id).apply();
+                .edit().putLong("user id", id).apply();
         this.setLoggedIn(context, true);
     }
 
