@@ -37,12 +37,12 @@ public class RegisteredEvent implements Serializable{
     private Category category;
     @SerializedName("regLimit")
     @Expose
-    private Integer regLimit;
+    private int regLimit;
     @SerializedName("checkedin")
     @Expose
-    private Integer checkedin;
+    private int checkedin;
 
-    public Integer getRegId() {
+    public int getRegId() {
         return regId;
     }
 

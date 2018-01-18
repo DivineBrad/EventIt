@@ -2,6 +2,7 @@ package com.example.bradj.eventit.Model.Adapter;
 
 import android.app.Activity;
 import android.content.Context;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -16,9 +17,15 @@ import com.example.bradj.eventit.Model.Entity.User;
 import com.example.bradj.eventit.Model.Service.ApiUtils;
 import com.example.bradj.eventit.Model.Service.OrganizationService;
 import com.example.bradj.eventit.Model.Service.SubscribedOrgService;
+import com.example.bradj.eventit.OrganizationsFragment;
 import com.example.bradj.eventit.R;
+import com.example.bradj.eventit.SubscribedOrgFragment;
+import com.google.gson.Gson;
+import com.pixplicity.easyprefs.library.Prefs;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import retrofit2.Call;
@@ -46,6 +53,11 @@ public class OrganizationsAdapter extends RecyclerView.Adapter<OrganizationsAdap
         this.dataList = dataList;
     }
 
+    public OrganizationsAdapter(Activity activity,Context context) {
+        this.dataList = new ArrayList<>();
+        this.activity = activity;
+        this.context=context;
+    }
     public OrganizationsAdapter(Activity activity) {
         this.dataList = new ArrayList<>();
         this.activity = activity;
@@ -66,25 +78,34 @@ public class OrganizationsAdapter extends RecyclerView.Adapter<OrganizationsAdap
     public void onBindViewHolder(OrganizationsAdapter.MyViewHolder holder, final int position) {
         final User currentUser = new User();
 
-        currentUser.setUserId(1);
         holder.tvOrgDetail.setText(dataList.get(position).getName());
+        if (dataList.get(position).isSubscribed()){
+            holder.btnSubOrg.setEnabled(false);
+        }
+
         holder.btnSubOrg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Log.e("Testing Org Click", "Subscribed Clicked");
                 SubscribedOrg subscribedOrg=new SubscribedOrg();
                 Organization org = new Organization();
-               // org.setOrgId(dataList.get(position).getOrgId());
-                org.setOrgId(4);
-                User currentUser = new User();
-                currentUser.setUserId(1);
-
+                org.setOrgId(dataList.get(position).getOrgId());
+                int userId=Prefs.getInt("user_id",1);
+                Gson gson = new Gson();
+                User currentUser = gson.fromJson(Prefs.getString("user object",""),User.class);
+                // Get current time
+                Date date = new Date();
+                String DATE_FORMAT = "MM/dd/yyyy";
+                SimpleDateFormat sdf = new SimpleDateFormat(DATE_FORMAT);
+               // System.out.println("Today is " + sdf.format(date));
+                subscribedOrg.setDate(sdf.format(date));
                 subscribedOrg.setUser(currentUser);
                 subscribedOrg.setOrganization(org);
                 OrganizationsAdapter.subOrg=subscribedOrg;
                // Add to db through api call
-                addSubscribedOrg();
-               // subscribedOrgService.addSubscribedOrg(subscribedOrg);
+               // dataList.get(position).setSubscribed(true);
+                addSubscribedOrg(dataList.get(position));
+
             }
         });
     }
@@ -106,7 +127,7 @@ public class OrganizationsAdapter extends RecyclerView.Adapter<OrganizationsAdap
         }
     }
 
-    private void addSubscribedOrg (){
+    private void addSubscribedOrg (final Organization org){
 
 
          subService.addSubscribedOrg(OrganizationsAdapter.subOrg).enqueue(new Callback<SubscribedOrg>() {
@@ -115,6 +136,8 @@ public class OrganizationsAdapter extends RecyclerView.Adapter<OrganizationsAdap
             public void onResponse(Call<SubscribedOrg> call, Response<SubscribedOrg> response) {
                 if(response.isSuccessful()){
                     Log.e("Sent properly", "Should work");
+                    org.setSubscribed(true);
+                   notifyDataSetChanged();
 
                 }
 

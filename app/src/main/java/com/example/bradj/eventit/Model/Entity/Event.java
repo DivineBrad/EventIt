@@ -42,8 +42,7 @@ public class Event implements Serializable{
     private Category category;
 
     //added, not mapped to db
-    @SerializedName("registered")
-    @Expose
+
     private boolean registered ;
 
 
@@ -162,6 +161,14 @@ public class Event implements Serializable{
 
     public Category getCategory() {
         return category;
+    }
+
+    public boolean isRegistered() {
+        return registered;
+    }
+
+    public void setRegistered(boolean registered) {
+        this.registered = registered;
     }
 }
 

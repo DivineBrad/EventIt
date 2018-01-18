@@ -55,7 +55,7 @@ public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, DashboardFragment.OnFragmentInteractionListener, MapFragment.OnFragmentInteractionListener,
         EventsFragment.OnFragmentInteractionListener,
         RegisteredEventsFragment.OnFragmentInteractionListener,SubscribedOrgFragment.OnFragmentInteractionListener,
-        OrganizationsFragment.OnFragmentInteractionListener{
+        OrganizationsFragment.OnFragmentInteractionListener, ViewEventFragment.OnFragmentInteractionListener{
 
     private LoginUtil loginUtil;
     private EventService mService;

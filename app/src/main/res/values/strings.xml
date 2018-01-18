@@ -145,4 +145,11 @@
 
     <string name="pref_title_vibrate">Vibrate</string>
     <string name="no_sub_org">You haven\'t Subscribed to any Organizations</string>
+    <string name="event_details">Event Details</string>
+    <string name="register">Register</string>
+    <string name="back">Back</string>
+    <string name="unregister">unregister</string>
+    <string name="event_description">Event Description</string>
+    <string name="organization_name">Organization Name</string>
+    <string name="event_address">Event Address</string>
 </resources>

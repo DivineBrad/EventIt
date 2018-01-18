@@ -24,6 +24,7 @@ public class SubscribedOrg implements Serializable {
     @SerializedName("organization")
     @Expose
     private Organization organization;
+    private boolean userSubscribed;
 
     public Integer getSubscribedId() {
         return subscribedId;
@@ -61,7 +62,7 @@ public class SubscribedOrg implements Serializable {
         return org_id;
     }
 
-    public void setOrg_id(Long org_id) {
+    public void setOrg_id(long org_id) {
         this.org_id = org_id;
     }
 
@@ -69,7 +70,15 @@ public class SubscribedOrg implements Serializable {
         return user_id;
     }
 
-    public void setUser_id(Long user_id) {
+    public void setUser_id(long user_id) {
         this.user_id = user_id;
+    }
+
+    public boolean isUserSubscribed() {
+        return userSubscribed;
+    }
+
+    public void setUserSubscribed(boolean userSubscribed) {
+        this.userSubscribed = userSubscribed;
     }
 }

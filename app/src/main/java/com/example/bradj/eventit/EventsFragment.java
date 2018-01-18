@@ -5,6 +5,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -18,10 +19,15 @@ import android.widget.Toast;
 
 import com.example.bradj.eventit.Model.Adapter.EventsAdapter;
 import com.example.bradj.eventit.Model.Adapter.RegisteredEventsAdapter;
+import com.example.bradj.eventit.Model.Entity.DataTransfer;
 import com.example.bradj.eventit.Model.Entity.Event;
 import com.example.bradj.eventit.Model.Entity.RegisteredEvent;
+import com.example.bradj.eventit.Model.Entity.User;
 import com.example.bradj.eventit.Model.Service.ApiUtils;
 import com.example.bradj.eventit.Model.Service.EventService;
+import com.example.bradj.eventit.Model.Service.RegisteredEventService;
+import com.google.gson.Gson;
+import com.pixplicity.easyprefs.library.Prefs;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -51,13 +57,14 @@ public class EventsFragment extends Fragment implements AdapterView.OnItemSelect
     private EventService mService;
     private RecyclerView recyclerView;
     private RegisteredEventsAdapter regEventsAdapter;
-   // private List<RegisteredEvent> regEventsList;
+    private List<RegisteredEvent> regEventsList;
     private EventsAdapter dataAdapter;
     private List<Event> dataArrayList;
     private static final String TAG = "EventsFragment";
     private List<Event> filteredList;
     private String access = "all";
     private String category = "all";
+    private RegisteredEventService regService;
 
     private OnFragmentInteractionListener mListener;
 
@@ -112,9 +119,11 @@ public class EventsFragment extends Fragment implements AdapterView.OnItemSelect
         recyclerView = (RecyclerView) rootView.findViewById(R.id.rvEvents);
         // Set Layout Manager
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        dataAdapter = new EventsAdapter(getActivity());
+        dataAdapter = new EventsAdapter((AppCompatActivity)getActivity());
         recyclerView.setAdapter(dataAdapter);
-        loadEvents();
+        loadRegisteredEvents();
+
+       // loadEvents();
         // For xml string array resource
         ArrayAdapter<CharSequence> filterAdapter = ArrayAdapter.createFromResource(rootView.getContext(), R.array.event_access,
                 android.R.layout.simple_spinner_item);
@@ -245,7 +254,22 @@ public class EventsFragment extends Fragment implements AdapterView.OnItemSelect
         call.enqueue(new Callback<List<Event>>() {
             @Override
             public void onResponse(Call<List<Event>> call, Response<List<Event>> response) {
-                dataArrayList = response.body();
+               dataArrayList = response.body();
+                Gson gson = new Gson();
+                User currentUser = gson.fromJson(Prefs.getString("user object",""),User.class);
+
+                regEventsList = DataTransfer.regEvents;
+                for (Event ev : dataArrayList ){
+                    for (RegisteredEvent regEv : regEventsList){
+                        if (regEv.getEvent().getEventId()==ev.getEventId()){
+                            ev.setRegistered(true);
+                        }
+                    }
+
+                }
+
+
+
                 dataAdapter.setDataList(dataArrayList);
                 dataAdapter.notifyDataSetChanged();
                 Log.e("JsonData", dataArrayList.get(0).getDescription());
@@ -260,6 +284,36 @@ public class EventsFragment extends Fragment implements AdapterView.OnItemSelect
             }
         });
     }
+
+    //Get Registered Events List
+
+    private void loadRegisteredEvents() {
+
+        regService = ApiUtils.getRegisteredEventService();
+        Gson gson = new Gson();
+        User currentUser = gson.fromJson(Prefs.getString("user object",""),User.class);
+
+        Call<List<RegisteredEvent>> call = regService.getUserRegisteredEvents(currentUser.getUserId());
+        call.enqueue(new Callback<List<RegisteredEvent>>() {
+            @Override
+            public void onResponse(Call<List<RegisteredEvent>> call, Response<List<RegisteredEvent>> response) {
+                regEventsList = response.body();
+                DataTransfer.regEvents=regEventsList;
+                loadEvents();
+                Log.e("JsonData", regEventsList.get(0).getDescription());
+
+
+            }
+
+            @Override
+            public void onFailure(Call<List<RegisteredEvent>> call, Throwable t) {
+                Log.e("Error", t.getMessage());
+                loadEvents();
+
+            }
+        });
+    }
+
     // Filter the list except Registered Events
     private void filterList(final String access, final String category){
             if (dataArrayList.size()<1) {
@@ -304,6 +358,7 @@ public class EventsFragment extends Fragment implements AdapterView.OnItemSelect
         else{
                     if (access.equals("all") && category.equals("all")) {
                         dataAdapter.setDataList(dataArrayList);
+                        dataAdapter.notifyDataSetChanged();
                     } else {
                         filteredList.clear();
                         for (Event ev : dataArrayList) {

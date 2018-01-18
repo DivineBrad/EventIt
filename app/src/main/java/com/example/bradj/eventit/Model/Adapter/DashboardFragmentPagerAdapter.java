@@ -40,7 +40,7 @@ public class DashboardFragmentPagerAdapter extends FragmentPagerAdapter {
                 Fragment tab2 = new EventsFragment();
                 return tab2;
             case 2:
-                Fragment tab3 = new OrganizationsFragment();
+                Fragment tab3 =  new OrganizationsFragment();
                 return tab3;
             default:
                 return null;

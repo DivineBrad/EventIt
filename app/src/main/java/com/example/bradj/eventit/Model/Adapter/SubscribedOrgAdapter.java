@@ -60,22 +60,21 @@ public class SubscribedOrgAdapter extends RecyclerView.Adapter<SubscribedOrgAdap
     @Override
     public void onBindViewHolder(SubscribedOrgAdapter.MyViewHolder holder, final int position) {
         holder.tvOrgDetail.setText(dataList.get(position).getOrganization().getName());
+//        if (!dataList.get(position).isUserSubscribed()){
+//            holder.btnUnsub.setText("unsubscribe");
+//            holder.btnUnsub.setEnabled(true);
+//        }
+//        else {
+//            holder.btnUnsub.setText("unsubscribed");
+//            holder.btnUnsub.setEnabled(false);
+//        }
         holder.btnUnsub.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                subscribedOrgService.deleteSubscribedOrg(dataList.get(position).getSubscribedId()).enqueue(new Callback<SubscribedOrg>() {
-                    @Override
-                    public void onResponse(Call<SubscribedOrg> call, Response<SubscribedOrg> response) {
-                        if (response.isSuccessful()){
-                            dataList.remove(position);
-                        }
-                    }
-
-                    @Override
-                    public void onFailure(Call<SubscribedOrg> call, Throwable t) {
-
-                    }
-                });
+               unsubscribe(dataList.get(position));
+               dataList.remove(dataList.get(position));
+               notifyItemRemoved(position);
+               notifyDataSetChanged();
             }
         });
 
@@ -95,6 +94,30 @@ public class SubscribedOrgAdapter extends RecyclerView.Adapter<SubscribedOrgAdap
             tvOrgDetail = (TextView) itemView.findViewById(R.id.tvSubOrgDetail);
             btnUnsub=(Button) itemView.findViewById(R.id.btnUnSub_Org);
         }
+    }
+
+    public void unsubscribe (final SubscribedOrg org) {
+
+        subscribedOrgService.deleteSubscribedOrg(org.getSubscribedId()).enqueue(new Callback<SubscribedOrg>() {
+            @Override
+            public void onResponse(Call<SubscribedOrg> call, Response<SubscribedOrg> response) {
+                if (response.isSuccessful()){
+                   org.setUserSubscribed(false);
+
+                    dataList.remove(org);
+
+
+                    notifyDataSetChanged();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<SubscribedOrg> call, Throwable t) {
+
+            }
+        });
+
+
     }
 }
 

@@ -139,7 +139,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                         if(response.isSuccessful()) {
                             User user=response.body();
                             Toast.makeText(getApplicationContext(), "Success", Toast.LENGTH_SHORT).show();
-                            loginUtil.createUserSession(getApplicationContext(),response.body().getUserId(), user);
+                            loginUtil.createUserSession(getApplicationContext(),(int)response.body().getUserId(), user);
                             Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                             startActivity(intent);
                             finish();

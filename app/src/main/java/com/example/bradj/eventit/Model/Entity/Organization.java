@@ -26,17 +26,15 @@ public class Organization implements Serializable {
     @SerializedName("user")
     @Expose
     private User user;
-    private String subscribed;
+    private boolean subscribed;
 
     /**
      * No args constructor for use in serialization
-     *
      */
     public Organization() {
     }
 
     /**
-     *
      * @param orgId
      * @param category
      * @param address
@@ -92,11 +90,11 @@ public class Organization implements Serializable {
         this.user = user;
     }
 
-    public String getSubscribed() {
+    public boolean isSubscribed() {
         return subscribed;
     }
 
-    public void setSubscribed(String subscribed) {
+    public void setSubscribed(boolean subscribed) {
         this.subscribed = subscribed;
     }
 }

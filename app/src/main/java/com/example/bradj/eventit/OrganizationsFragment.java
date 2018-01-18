@@ -3,6 +3,7 @@ package com.example.bradj.eventit;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
+
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -14,10 +15,13 @@ import android.view.ViewGroup;
 import com.example.bradj.eventit.Model.Adapter.OrganizationsAdapter;
 import com.example.bradj.eventit.Model.Entity.Organization;
 import com.example.bradj.eventit.Model.Entity.SubscribedOrg;
+import com.example.bradj.eventit.Model.Entity.User;
 import com.example.bradj.eventit.Model.Service.ApiUtils;
 import com.example.bradj.eventit.Model.Service.OrganizationService;
 import com.example.bradj.eventit.Model.Service.SubscribedOrgService;
 import com.example.bradj.eventit.Utilities.LoginUtil;
+import com.google.gson.Gson;
+import com.pixplicity.easyprefs.library.Prefs;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -103,9 +107,10 @@ public class OrganizationsFragment extends Fragment {
         recyclerView = (RecyclerView) rootView.findViewById(R.id.rvOrganizations);
         // Set Layout Manager
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        dataAdapter = new OrganizationsAdapter(getActivity());
+        dataAdapter = new OrganizationsAdapter(getActivity(),this.getContext());
         recyclerView.setAdapter(dataAdapter);
-        loadOrgs();
+       // loadOrgs();
+        loadUserSubscribedList();
 
 
         return rootView;
@@ -153,7 +158,7 @@ public class OrganizationsFragment extends Fragment {
     }
 
     private void loadOrgs() {
-        int userId = getContext().getSharedPreferences(LoginUtil.PREFS_NAME,Context.MODE_PRIVATE).getInt("user id",0);
+      //  int userId = getContext().getSharedPreferences(LoginUtil.PREFS_NAME,Context.MODE_PRIVATE).getInt("user id",0);
 
         mService = ApiUtils.getOrganizationService();
         Call<List<Organization>> call = mService.getOrganizations();
@@ -161,6 +166,18 @@ public class OrganizationsFragment extends Fragment {
             @Override
             public void onResponse(Call<List<Organization>> call, Response<List<Organization>> response) {
                 dataArrayList = response.body();
+                List<Organization> newList = new ArrayList<Organization>();
+                if (subscribedOrgList!=null){
+                    for (Organization org : dataArrayList){
+                        for (SubscribedOrg subOrg : subscribedOrgList){
+                            if(org.getOrgId()==subOrg.getOrganization().getOrgId()){
+                                org.setSubscribed(true);
+                                Log.e("JsonData", Boolean.toString(org.isSubscribed()));
+                            }
+                        }
+                    }
+                }
+
                 dataAdapter.setDataList(dataArrayList);
                 dataAdapter.notifyDataSetChanged();
                 Log.e("JsonData", dataArrayList.get(0).getName());
@@ -187,6 +204,28 @@ public class OrganizationsFragment extends Fragment {
                 dataAdapter.setDataList(dataArrayList);
                 dataAdapter.notifyDataSetChanged();
                 Log.e("JsonData", dataArrayList.get(0).getName());
+
+
+            }
+
+            @Override
+            public void onFailure(Call<List<SubscribedOrg>> call, Throwable t) {
+                Log.e("Error", t.getMessage());
+
+            }
+        });
+    }
+    private void loadUserSubscribedList (){
+        subService = ApiUtils.getSubscribedOrgService();
+        Gson gson = new Gson();
+        User currentUser = gson.fromJson(Prefs.getString("user object",""),User.class);
+
+        Call<List<SubscribedOrg>> call = subService.getUserSubscribedOrgs(currentUser.getUserId());
+        call.enqueue(new Callback<List<SubscribedOrg>>() {
+            @Override
+            public void onResponse(Call<List<SubscribedOrg>> call, Response<List<SubscribedOrg>> response) {
+                subscribedOrgList = response.body();
+                loadOrgs();
 
 
             }
