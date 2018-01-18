@@ -77,7 +77,7 @@ public class UserOrgEventsAdapter extends RecyclerView.Adapter<UserOrgEventsAdap
     public void onBindViewHolder(UserOrgEventsAdapter.MyViewHolder holder, final int position) {
         
             holder.tvEventDetail.setText(dataList.get(position).getName());
-            holder.btnView.setVisibility(View.INVISIBLE);
+            
        
     }
 
