@@ -17,7 +17,11 @@
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
     <style name="Default_Btn" >
-    <item name="android:textColor">@color/colorPrimary</item>
+    <item name="android:backgroundTint">@color/colorOrange</item>
+
+    </style>
+    <style name="Default_Recycle" >
+        <item name="android:drawableBottom">@color/colorOrange</item>
 
     </style>
 

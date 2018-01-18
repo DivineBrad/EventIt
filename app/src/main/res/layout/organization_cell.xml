@@ -20,9 +20,12 @@
 
     <Button
         android:id="@+id/btnSubscribeOrg"
-        android:layout_width="25dp"
+
         android:layout_height="wrap_content"
-        android:layout_weight="1"
+
         android:text="Subscribe"
+        android:layout_width="100dp"
+        style="@style/Default_Btn"
+        android:textSize="14sp"
         />
 </LinearLayout>
