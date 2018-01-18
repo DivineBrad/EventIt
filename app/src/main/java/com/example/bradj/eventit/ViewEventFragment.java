@@ -118,6 +118,7 @@ public class ViewEventFragment extends Fragment  {
         for (RegisteredEvent regEv : DataTransfer.regEvents){
             if (event.getEventId()==regEv.getEvent().getEventId()){
                 btnRegister.setEnabled(false);
+                btnRegister.setText("Registered");
             }
         }
 
