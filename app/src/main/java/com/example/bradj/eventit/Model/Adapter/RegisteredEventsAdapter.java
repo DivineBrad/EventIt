@@ -3,6 +3,7 @@ package com.example.bradj.eventit.Model.Adapter;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -12,6 +13,7 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.bradj.eventit.BarcodeScanActivity;
 import com.example.bradj.eventit.CheckInActivity;
 import com.example.bradj.eventit.MainActivity;
 import com.example.bradj.eventit.Model.Entity.Event;
@@ -20,6 +22,12 @@ import com.example.bradj.eventit.Model.Service.ApiUtils;
 import com.example.bradj.eventit.R;
 import com.example.bradj.eventit.RegisteredEventsFragment;
 import com.example.bradj.eventit.Utilities.LoginUtil;
+import com.google.zxing.BarcodeFormat;
+import com.google.zxing.MultiFormatWriter;
+import com.google.zxing.WriterException;
+import com.google.zxing.common.BitMatrix;
+import com.journeyapps.barcodescanner.BarcodeEncoder;
+import com.pixplicity.easyprefs.library.Prefs;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -74,10 +82,19 @@ public class RegisteredEventsAdapter extends RecyclerView.Adapter<RegisteredEven
         holder.btnCheckIn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-                Intent intent=new Intent(context, CheckInActivity.class);
-                intent.putExtra("event",event.getRegId());
-                context.startActivity(intent);
+                Log.i("msg",Prefs.getString("checkIn_Mode", ""));
+                if (Prefs.getString("checkIn_Mode", "Nfc").equalsIgnoreCase("Nfc")){
+                    Intent intent=new Intent(context, CheckInActivity.class);
+                    intent.putExtra("event",event.getRegId());
+                    context.startActivity(intent);
+                }
+                else if(Prefs.getString("checkIn_Mode", "Nfc").equalsIgnoreCase("Barcode")){
+                        String token=event.getToken(); // Whatever you need to encode in the QR code
+                        Intent intent=new Intent(context, BarcodeScanActivity.class);
+                        intent.putExtra("event",event.getRegId());
+                        Log.i("msg", ""+event.getRegId());
+                        context.startActivity(intent);
+                }
 
                 Toast.makeText(context, "Refresh the list to View Changes", Toast.LENGTH_LONG   ).show();
             }
