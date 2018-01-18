@@ -13,7 +13,7 @@ public class Organization implements Serializable {
 
     @SerializedName("orgId")
     @Expose
-    private Integer orgId;
+    private long orgId;
     @SerializedName("name")
     @Expose
     private String name;
@@ -26,6 +26,7 @@ public class Organization implements Serializable {
     @SerializedName("user")
     @Expose
     private User user;
+    private String subscribed;
 
     /**
      * No args constructor for use in serialization
@@ -42,7 +43,7 @@ public class Organization implements Serializable {
      * @param name
      * @param user
      */
-    public Organization(Integer orgId, String name, Address address, Category category, User user) {
+    public Organization(Long orgId, String name, Address address, Category category, User user) {
         super();
         this.orgId = orgId;
         this.name = name;
@@ -51,11 +52,11 @@ public class Organization implements Serializable {
         this.user = user;
     }
 
-    public Integer getOrgId() {
+    public long getOrgId() {
         return orgId;
     }
 
-    public void setOrgId(Integer orgId) {
+    public void setOrgId(long orgId) {
         this.orgId = orgId;
     }
 
@@ -91,4 +92,11 @@ public class Organization implements Serializable {
         this.user = user;
     }
 
+    public String getSubscribed() {
+        return subscribed;
+    }
+
+    public void setSubscribed(String subscribed) {
+        this.subscribed = subscribed;
+    }
 }

@@ -17,10 +17,10 @@ public class SubscribedOrg implements Serializable {
     private User user;
     @SerializedName("org_id")
     @Expose
-    private Long org_id;
+    private long org_id;
     @SerializedName("user_id")
     @Expose
-    private Long user_id;
+    private long user_id;
     @SerializedName("organization")
     @Expose
     private Organization organization;
