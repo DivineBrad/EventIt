@@ -28,16 +28,19 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.bradj.eventit.Model.Adapter.EventsAdapter;
 import com.example.bradj.eventit.Model.Adapter.RegisteredEventsAdapter;
 import com.example.bradj.eventit.Model.Entity.Event;
 import com.example.bradj.eventit.Model.Entity.RegisteredEvent;
+import com.example.bradj.eventit.Model.Entity.SubscribedOrg;
 import com.example.bradj.eventit.Model.Service.ApiUtils;
 import com.example.bradj.eventit.Model.Service.EventService;
 import com.example.bradj.eventit.Model.Service.RegisteredEventService;
 import com.example.bradj.eventit.Model.Entity.User;
 import com.example.bradj.eventit.Model.Service.ApiUtils;
+import com.example.bradj.eventit.Model.Service.SubscribedOrgService;
 import com.example.bradj.eventit.Model.Service.UserService;
 import com.example.bradj.eventit.Utilities.LoginUtil;
 import com.google.gson.Gson;
@@ -63,7 +66,7 @@ public class MainActivity extends AppCompatActivity
         OrganizationsFragment.OnFragmentInteractionListener, ViewEventFragment.OnFragmentInteractionListener{
 
     private LoginUtil loginUtil;
-    private EventService mService;
+    private SubscribedOrgService mService;
     private RecyclerView recyclerView;
    // private RegisteredEventsAdapter dataAdapter;
     //private List<RegisteredEvent> dataArrayList;
@@ -80,18 +83,17 @@ public class MainActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        new Prefs.Builder()
-                .setContext(this)
-                .setMode(ContextWrapper.MODE_PRIVATE)
-                .setPrefsName(getPackageName())
-                .setUseDefaultSharedPreference(true)
-                .build();
+        loginUtil= LoginUtil.getInstance();
+        mService=ApiUtils.getSubscribedOrgService();
+        if (!loginUtil.isLoggedIn(this)){
+            Intent intent=new Intent(getApplicationContext(),SplashActivity.class);
+            startActivity(intent);
+            finish();
+        }
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         final View hView =  navigationView.getHeaderView(0);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        loginUtil= LoginUtil.getInstance();
-        userService= ApiUtils.getUserService();
         Gson gson=new Gson();
         user=gson.fromJson(Prefs.getString("user object",""), User.class);
         userDetails=hView.findViewById(R.id.display_userInfo);
@@ -116,29 +118,27 @@ public class MainActivity extends AppCompatActivity
 
         navigationView.setNavigationItemSelectedListener(this);
 
-        NotificationCompat.Builder mBuilder =
-                new NotificationCompat.Builder(this)
-                        .setSmallIcon(R.mipmap.eventit_icon)
-                        .setContentTitle("My Subscribed Organizations")
-                        .setContentText("You don't want to miss these events");
+        NotificationCompat.Builder mBuilder =new NotificationCompat.Builder(getApplicationContext())
+                                                     .setSmallIcon(R.mipmap.eventit_icon)
+                                                     .setContentTitle("My Subscribed Organizations")
+                                                     .setContentText("You don't want to miss these events");
 
-        int mNotificationId = 001;
+                                     int mNotificationId = 001;
 // Gets an instance of the NotificationManager service
-        NotificationManager mNotifyMgr =
-                (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+                                     NotificationManager mNotifyMgr =
+                                             (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
 
-        Intent resultIntent = new Intent(this, RegisteredOrgEventsActivity.class);
+                                     Intent resultIntent = new Intent(MainActivity.this, RegisteredOrgEventsActivity.class);
 //        resultIntent.setFlags(Intent.FLAG_ONE);
-        TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
+                                     TaskStackBuilder stackBuilder = TaskStackBuilder.create(getApplicationContext());
 // Adds the back stack
-        stackBuilder.addParentStack(RegisteredOrgEventsActivity.class);
+                                     stackBuilder.addParentStack(RegisteredOrgEventsActivity.class);
 // Adds the Intent to the top of the stack
-        stackBuilder.addNextIntent(resultIntent);
-        PendingIntent resultPendingIntent=stackBuilder.getPendingIntent(0,PendingIntent.FLAG_UPDATE_CURRENT);
-        mBuilder.setContentIntent(resultPendingIntent);
+                                     stackBuilder.addNextIntent(resultIntent);
+                                     PendingIntent resultPendingIntent=stackBuilder.getPendingIntent(0,PendingIntent.FLAG_UPDATE_CURRENT);
+                                     mBuilder.setContentIntent(resultPendingIntent);
 // Builds the notification and issues it.
-        mNotifyMgr.notify(mNotificationId, mBuilder.build());
-
+                                     mNotifyMgr.notify(mNotificationId, mBuilder.build());
     }
 
     @Override

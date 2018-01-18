@@ -44,12 +44,12 @@ public class LoginUtil  {
         Prefs.putBoolean("LOGGED", value);
     }
 
-    public void createUserSession(@NonNull Context context, int id, User user){
+    public void createUserSession(@NonNull Context context, long id, User user){
 //        context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
 //                .edit().putInt("user id", id).apply();
         Gson gson=new Gson();
         String userString= gson.toJson(user);
-        Prefs.putInt("user id", id);
+        Prefs.putLong("user id", id);
         Prefs.putString("user object", userString);
         this.setLoggedIn(context, true);
     }
