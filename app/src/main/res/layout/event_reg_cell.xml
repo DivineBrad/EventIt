@@ -9,25 +9,31 @@
         android:id="@+id/eventLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        >
+        android:layout_marginStart="2dp">
 
         <TextView
             android:id="@+id/tvRegEventDetail"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+
             android:gravity="start"
-            android:padding="4dp"
+            android:layout_marginEnd="4dp"
+
             android:text="Event Details"
 
-            android:textSize="14sp" />
+            android:textSize="18sp" />
 
         <Button
             android:id="@+id/btnRegEvent"
-            android:layout_width="20dp"
+            android:layout_width="100dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Check In" />
+
+            android:text="Check In"
+            style="@style/Default_Btn"
+            android:textSize="14sp"
+
+            />
     </LinearLayout>
 
 </LinearLayout>
