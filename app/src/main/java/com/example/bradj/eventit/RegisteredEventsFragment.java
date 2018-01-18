@@ -13,6 +13,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.CompoundButton;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -23,6 +26,7 @@ import com.example.bradj.eventit.Model.Entity.RegisteredEvent;
 import com.example.bradj.eventit.Model.Service.ApiUtils;
 import com.example.bradj.eventit.Model.Service.RegisteredEventService;
 import com.example.bradj.eventit.Utilities.LoginUtil;
+import com.pixplicity.easyprefs.library.Prefs;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -95,7 +99,7 @@ public class RegisteredEventsFragment extends Fragment implements AdapterView.On
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View rootView = inflater.inflate(R.layout.fragment_registered_event, container, false);
+        final View rootView = inflater.inflate(R.layout.fragment_registered_event, container, false);
 
         //initialize main arraylist of items
         dataArrayList = new ArrayList<>();
@@ -117,6 +121,39 @@ public class RegisteredEventsFragment extends Fragment implements AdapterView.On
                 loadEvents();
             }
         });
+        // This will get the radiobutton that has changed in its check state
+        final RadioButton checkedRadioButtonNfc = (RadioButton)rootView.findViewById(R.id.rBtnNfc);
+        final RadioButton checkedRadioButtonBarCode = (RadioButton)rootView.findViewById(R.id.rBtnBarCode);
+                // This puts the value (true/false) into the variable
+//                boolean isChecked = checkedRadioButton.isChecked();
+        if(Prefs.getString("checkIn_Mode","").equalsIgnoreCase("Barcode")){
+            checkedRadioButtonBarCode.setChecked(true);
+        }
+        checkedRadioButtonNfc.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                if(checkedRadioButtonNfc.isChecked()){
+                    Prefs.putString("checkIn_Mode", "Nfc");
+                    Log.i("msg","nfc clicked");
+                    Log.i("msg",Prefs.getString("checkIn_Mode", ""));
+                }
+            }
+        });
+        checkedRadioButtonBarCode.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                if(checkedRadioButtonBarCode.isChecked()){
+                    Prefs.putString("checkIn_Mode", "Barcode");
+                    Log.i("msg","barcode clicked");
+                    Log.i("msg",Prefs.getString("checkIn_Mode", ""));
+
+                }
+            }
+        });
+
+
         return rootView;
 
     }
@@ -193,6 +230,7 @@ public class RegisteredEventsFragment extends Fragment implements AdapterView.On
                         dataAdapter.setDataList(dataArrayList);
                         dataAdapter.notifyDataSetChanged();
                         Log.e("JsonData", dataArrayList.get(0).getDescription());
+                        statusText.setVisibility(View.GONE);
                     }
                 }
 
@@ -203,7 +241,8 @@ public class RegisteredEventsFragment extends Fragment implements AdapterView.On
             @Override
             public void onFailure(Call<List<RegisteredEvent>> call, Throwable t) {
                 Log.e("Error", t.getMessage());
-
+                statusText.setText("Network Error");
+                statusText.setVisibility(View.VISIBLE);
             }
         });
     }

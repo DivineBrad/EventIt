@@ -1,7 +1,11 @@
 package com.example.bradj.eventit;
 
 import android.app.Fragment;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.app.TaskStackBuilder;
 import android.content.Context;
+import android.content.ContextWrapper;
 import android.net.Uri;
 import android.support.v4.app.FragmentTransaction;
 import android.content.DialogInterface;
@@ -9,6 +13,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.NotificationCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -75,6 +80,12 @@ public class MainActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        new Prefs.Builder()
+                .setContext(this)
+                .setMode(ContextWrapper.MODE_PRIVATE)
+                .setPrefsName(getPackageName())
+                .setUseDefaultSharedPreference(true)
+                .build();
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         final View hView =  navigationView.getHeaderView(0);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -85,7 +96,6 @@ public class MainActivity extends AppCompatActivity
         user=gson.fromJson(Prefs.getString("user object",""), User.class);
         userDetails=hView.findViewById(R.id.display_userInfo);
         userEmail=hView.findViewById(R.id.display_userEmail);
-
         userDetails.setText(user.getFirstName()+" "+user.getLastName());
         userEmail.setText(user.getEmail());
 
@@ -105,6 +115,30 @@ public class MainActivity extends AppCompatActivity
         setTitle("Dashboard");
 
         navigationView.setNavigationItemSelectedListener(this);
+
+        NotificationCompat.Builder mBuilder =
+                new NotificationCompat.Builder(this)
+                        .setSmallIcon(R.mipmap.eventit_icon)
+                        .setContentTitle("My Subscribed Organizations")
+                        .setContentText("You don't want to miss these events");
+
+        int mNotificationId = 001;
+// Gets an instance of the NotificationManager service
+        NotificationManager mNotifyMgr =
+                (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+
+        Intent resultIntent = new Intent(this, RegisteredOrgEventsActivity.class);
+//        resultIntent.setFlags(Intent.FLAG_ONE);
+        TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
+// Adds the back stack
+        stackBuilder.addParentStack(RegisteredOrgEventsActivity.class);
+// Adds the Intent to the top of the stack
+        stackBuilder.addNextIntent(resultIntent);
+        PendingIntent resultPendingIntent=stackBuilder.getPendingIntent(0,PendingIntent.FLAG_UPDATE_CURRENT);
+        mBuilder.setContentIntent(resultPendingIntent);
+// Builds the notification and issues it.
+        mNotifyMgr.notify(mNotificationId, mBuilder.build());
+
     }
 
     @Override
